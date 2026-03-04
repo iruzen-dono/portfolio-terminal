@@ -11,9 +11,9 @@ import Terminal from "@/components/Terminal";
 import MatrixRain from "@/components/MatrixRain";
 import GUIMode from "@/components/GUIMode";
 import BootSequence from "@/components/BootSequence";
+import GlitchTakeover from "@/components/GlitchTakeover";
 import { PortfolioProvider } from "@/lib/PortfolioContext";
 import { useKonami } from "@/lib/useKonami";
-import { launchConfetti } from "@/lib/confetti";
 import type { PortfolioData } from "@/lib/data";
 
 interface ClientAppProps {
@@ -26,18 +26,23 @@ function HomeInner({ portfolioData }: { portfolioData: PortfolioData }) {
   const [mode, setMode] = useState<"boot" | "terminal" | "gui">("boot");
   const [transitioning, setTransitioning] = useState(false);
   const [lang, setLang] = useState<"fr" | "en">("fr");
+  const [glitchActive, setGlitchActive] = useState(false);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
-  /* Konami code → confetti + cyberpunk theme */
+  /* Konami code → Glitch Takeover */
   useKonami(
     useCallback(() => {
-      launchConfetti(100);
-      setTheme("cyberpunk");
-    }, [])
+      if (!glitchActive) setGlitchActive(true);
+    }, [glitchActive])
   );
+
+  const handleGlitchComplete = useCallback(() => {
+    setGlitchActive(false);
+    setTheme("cyberpunk");
+  }, []);
 
   /* Animated mode switch */
   const switchMode = useCallback((target: "terminal" | "gui") => {
@@ -54,6 +59,9 @@ function HomeInner({ portfolioData }: { portfolioData: PortfolioData }) {
   return (
     <main className={`relative ${isGUI ? "min-h-screen" : "h-screen overflow-hidden"}`}>
       {theme === "matrix" && <MatrixRain />}
+
+      {/* Konami Easter Egg — Glitch Takeover */}
+      <GlitchTakeover active={glitchActive} onComplete={handleGlitchComplete} />
 
       {/* Transition overlay */}
       <div
