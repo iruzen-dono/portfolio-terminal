@@ -7,7 +7,7 @@ Un portfolio interactif sous forme de terminal, construit avec **Next.js 14**, *
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8?logo=tailwindcss)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-## ✨ Fonctionnalités
+##  Fonctionnalités
 
 ### 🖥️ Mode Terminal
 - **30+ commandes** : `help`, `about`, `skills`, `projects`, `experience`, `contact`, `neofetch`, `cowsay`, `hack`…
@@ -17,7 +17,7 @@ Un portfolio interactif sous forme de terminal, construit avec **Next.js 14**, *
 - **Effets sonores** activables avec `sound on`
 - **Easter eggs** : Konami code, `sudo hire-me`, `matrix`, `sl`…
 
-### 🎨 Mode GUI
+###  Mode GUI
 - Interface portfolio classique avec navigation fluide
 - **Scroll reveal** animé sur chaque section
 - **Typewriter effect** sur le nom dans le hero
@@ -25,24 +25,24 @@ Un portfolio interactif sous forme de terminal, construit avec **Next.js 14**, *
 - Timeline d'expérience avec ligne gradient
 - Contact avec icônes SVG (GitHub, Email, LinkedIn, X)
 
-### 🌍 Bilingue (fr/en)
+###  Bilingue (fr/en)
 - Commande `lang fr` / `lang en` pour basculer
 - Traduction complète du terminal et du GUI
 
-### 📊 Analytics & Stats
+###  Analytics & Stats
 - `stats` — Statistiques GitHub (repos, langages, compétences)
 - `analytics` — Analytique de session locale (top commandes, nombre de sessions)
 - Stockage anonyme en localStorage, aucun service externe
 
-### 📱 Mobile-first
+###  Mobile-first
 - Barre de commandes rapides pour mobile
 - Boutons historique ▲▼ et envoi ⏎
 - Gestion du viewport avec `visualViewport` API
 
-### 🔄 Transition animée
+###  Transition animée
 - Overlay avec animation de points lors du switch Terminal ↔ GUI
 
-## 🚀 Démarrage rapide
+##  Démarrage rapide
 
 ```bash
 # Cloner le repo
@@ -58,7 +58,7 @@ npm run dev
 
 Ouvrir [https://portfolio-terminal-lake.vercel.app/](https://portfolio-terminal-lake.vercel.app/).
 
-## 📁 Structure du projet
+##  Structure du projet
 
 ```
 src/
@@ -82,7 +82,7 @@ src/
     └── useSound.ts       # Hook effets sonores
 ```
 
-## 🎮 Commandes disponibles
+##  Commandes disponibles
 
 | Commande | Description |
 |----------|-------------|
@@ -102,14 +102,14 @@ src/
 | `hack` | Essayez… 👀 |
 | `sudo hire-me` | Vous savez quoi faire |
 
-## 🛠️ Technologies
+##  Technologies
 
 - **Framework** : Next.js 14 (App Router)
 - **Langage** : TypeScript 5.4
 - **Style** : Tailwind CSS 3.4
 - **Déploiement** : Vercel
 
-## 📄 License
+##  License
 
 MIT — libre d'utilisation et de modification.
 
