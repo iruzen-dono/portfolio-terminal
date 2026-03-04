@@ -502,7 +502,7 @@ function contactCmd(portfolioData: PortfolioData): CommandResult {
   const { contact } = portfolioData;
   const rows: [string, string, string][] = [
     ["📧  Email", contact.email, `mailto:${contact.email}`],
-    ["🐙  GitHub", contact.github, `https://${contact.github}`],
+    ["🐙  GitHub", contact.github, contact.github.startsWith("http") ? contact.github : `https://${contact.github}`],
     ...(contact.linkedin
       ? [["💼  LinkedIn", contact.linkedin, `https://${contact.linkedin}`] as [string, string, string]]
       : []),

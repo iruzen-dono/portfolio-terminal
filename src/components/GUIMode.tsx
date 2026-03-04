@@ -255,7 +255,7 @@ export default function GUIMode({ onTerminalSwitch, lang }: GUIModeProps) {
             </a>
             {contact.github && (
               <a
-                href={`https://${contact.github}`}
+                href={contact.github.startsWith("http") ? contact.github : `https://${contact.github}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-7 py-3 rounded-xl border border-[var(--border)] hover:border-[var(--prompt)] hover:text-[var(--prompt)] transition-all hover:scale-105"
@@ -480,7 +480,7 @@ export default function GUIMode({ onTerminalSwitch, lang }: GUIModeProps) {
           {/* GitHub card */}
           {contact.github && (
             <a
-              href={`https://${contact.github}`}
+              href={contact.github.startsWith("http") ? contact.github : `https://${contact.github}`}
               target="_blank"
               rel="noopener noreferrer"
               className="gui-card flex items-center gap-4 p-5 rounded-xl border border-[var(--border)] hover:border-[var(--prompt)] transition-all group"

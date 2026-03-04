@@ -34,7 +34,8 @@ export function mergeGitHubData(gh: GitHubData): PortfolioData {
     if (gh.profile.location) base.location = gh.profile.location;
     if (gh.profile.email) base.email = gh.profile.email;
     base.github = gh.profile.html_url;
-    base.contact.github = gh.profile.html_url;
+    // contact.github is used with `https://` prefix in templates, so strip protocol
+    base.contact.github = gh.profile.html_url.replace(/^https?:\/\//, "");
     if (gh.profile.email) base.contact.email = gh.profile.email;
   }
 
