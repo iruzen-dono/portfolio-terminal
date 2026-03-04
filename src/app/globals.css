@@ -404,6 +404,13 @@ html, body {
   -webkit-overflow-scrolling: touch;
 }
 
+/* dvh fallback: ensure h-dvh works on older browsers */
+@supports not (height: 100dvh) {
+  .h-dvh {
+    height: 100vh;
+  }
+}
+
 /* Scale ASCII art on small screens */
 @media (max-width: 639px) {
   pre {

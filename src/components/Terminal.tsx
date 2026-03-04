@@ -67,7 +67,7 @@ export default function Terminal({
   const { enabled: soundOn, setEnabled: setSoundOn, playKey, playExec, playError } = useSound();
   const { data: portfolioData } = usePortfolio();
   const [isMobile, setIsMobile] = useState(false);
-  const [viewportH, setViewportH] = useState("100vh");
+  const [viewportH, setViewportH] = useState("100dvh");
 
   /* detect mobile & handle visual viewport changes (keyboard open/close) */
   useEffect(() => {

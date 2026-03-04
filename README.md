@@ -1,4 +1,4 @@
-# 💻 Portfolio Terminal
+#  Portfolio Terminal
 
 Un portfolio interactif sous forme de terminal, construit avec **Next.js 14**, **React 18**, **TypeScript** et **Tailwind CSS**.
 
@@ -56,7 +56,7 @@ npm install
 npm run dev
 ```
 
-Ouvrir [http://localhost:3000](http://localhost:3000).
+Ouvrir [https://portfolio-terminal-lake.vercel.app/](https://portfolio-terminal-lake.vercel.app/).
 
 ## 📁 Structure du projet
 
@@ -115,4 +115,4 @@ MIT — libre d'utilisation et de modification.
 
 ---
 
-Créé avec ❤️ par [Jules Zhou](https://github.com/iruzen-dono)
+Créé avec par [Jules Zhou](https://github.com/iruzen-dono)

@@ -57,7 +57,7 @@ function HomeInner({ portfolioData }: { portfolioData: PortfolioData }) {
   const isGUI = mode === "gui";
 
   return (
-    <main className={`relative ${isGUI ? "min-h-screen" : "h-screen overflow-hidden"}`}>
+    <main className={`relative ${isGUI ? "min-h-screen" : "h-dvh overflow-hidden"}`}>
       {theme === "matrix" && <MatrixRain />}
 
       {/* Konami Easter Egg — Glitch Takeover */}
