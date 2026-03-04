@@ -74,7 +74,7 @@ export const portfolioData = {
       description:
         "Portfolio interactif style terminal Unix avec boot sequence, 35+ commandes, thèmes personnalisables, onboarding dynamique et détection hardware réelle.",
       tech: ["Next.js 14", "React 18", "TypeScript", "TailwindCSS", "Web Audio API", "Canvas API"],
-      github: "",
+      github: "https://github.com/iruzen-dono/portfolio-terminal",
       live: "",
       year: 2026,
     },
