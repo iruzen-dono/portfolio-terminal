@@ -114,7 +114,10 @@ export default function Terminal({
     trackSession();
   }, []);
 
-  const focusInput = useCallback(() => {
+  const focusInput = useCallback((e: React.MouseEvent) => {
+    // Don't steal focus from link clicks
+    const target = e.target as HTMLElement;
+    if (target.closest("a")) return;
     inputRef.current?.focus();
   }, []);
 
