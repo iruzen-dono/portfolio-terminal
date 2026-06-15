@@ -50,6 +50,7 @@ export const portfolioData = {
       tech: ["Kotlin", "KMP", "Compose Multiplatform", "Ktor", "SQLite", "Exposed", "Gradle"],
       github: "https://github.com/iruzen-dono/KeycePass",
       live: "",
+      image: "https://opengraph.githubassets.com/1/iruzen-dono/KeycePass",
       year: 2025,
     },
     {
@@ -60,6 +61,7 @@ export const portfolioData = {
       tech: ["Next.js 15", "React 19", "TypeScript", "NestJS", "Prisma", "PostgreSQL", "TailwindCSS", "NextAuth", "Docker"],
       github: "https://github.com/iruzen-dono/XEARN",
       live: "",
+      image: "https://opengraph.githubassets.com/1/iruzen-dono/XEARN",
       year: 2026,
     },
     {
@@ -70,6 +72,7 @@ export const portfolioData = {
       tech: ["Java 17", "Spring Boot 3", "Spring Security", "JPA/Hibernate", "JWT", "PostgreSQL", "Maven", "OpenAPI"],
       github: "https://github.com/iruzen-dono/Java-sprinboot",
       live: "",
+      image: "https://opengraph.githubassets.com/1/iruzen-dono/Java-sprinboot",
       year: 2025,
     },
     {
@@ -80,6 +83,7 @@ export const portfolioData = {
       tech: ["Python", "Hermes Agent", "Telegram API", "Discord API", "SQLite", "Docker", "CLI/TUI", "Webhooks"],
       github: "https://github.com/iruzen-dono/iruzen-dono",
       live: "",
+      image: "https://opengraph.githubassets.com/1/iruzen-dono/iruzen-dono",
       year: 2025,
     },
     {
@@ -89,7 +93,8 @@ export const portfolioData = {
         "Portfolio interactif style terminal Unix avec boot sequence, 30+ commandes, systeme de fichiers virtuel et mode GUI. Design monochrome brutalist.",
       tech: ["Next.js 14", "React 18", "TypeScript", "TailwindCSS", "Web Audio API", "Canvas API"],
       github: "https://github.com/iruzen-dono/portfolio-terminal",
-      live: "",
+      live: "https://portfolio-terminal-lake.vercel.app",
+      image: "/projects/portfolio-terminal.png",
       year: 2026,
     },
     {
@@ -100,6 +105,7 @@ export const portfolioData = {
       tech: ["PHP 7.4", "MySQL", "MVC", "Composer", "HTML/CSS", "JavaScript"],
       github: "https://github.com/iruzen-dono/Nova",
       live: "",
+      image: "https://opengraph.githubassets.com/1/iruzen-dono/Nova",
       year: 2026,
     },
     {
@@ -110,6 +116,7 @@ export const portfolioData = {
       tech: ["Java SE", "Java Swing", "MySQL", "JDBC", "DAO Pattern"],
       github: "https://github.com/iruzen-dono/RestaurantApp",
       live: "",
+      image: "https://opengraph.githubassets.com/1/iruzen-dono/RestaurantApp",
       year: 2026,
     },
   ],

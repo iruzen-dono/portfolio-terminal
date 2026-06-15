@@ -107,6 +107,7 @@ export function mergeGitHubData(gh: GitHubData): PortfolioData {
       tech: uniqueTech.length > 0 ? uniqueTech : ["Code"],
       github: repo.html_url,
       live: repo.homepage || "",
+      image: `https://opengraph.githubassets.com/1/${repo.full_name}`,
       year,
     });
   }

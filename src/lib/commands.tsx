@@ -477,16 +477,24 @@ function openCmd(projectId?: string, portfolioData?: PortfolioData): CommandResu
   return {
     output: (
       <div className="animate-fade-in border border-[var(--border)] rounded-lg p-5 max-w-2xl">
-        <div className="flex items-center gap-3 mb-3">
-          <span className="text-2xl">📦</span>
-          <div>
-            <p className="text-[var(--prompt)] font-bold text-lg">
-              {project.name}
-            </p>
-            <p className="text-[var(--text)] opacity-40 text-sm">
-              {project.year}
-            </p>
+        {project.image && (
+          <div className="mb-4 border border-[var(--border)] overflow-hidden rounded bg-[var(--surface)]">
+            <img
+              src={project.image}
+              alt={project.name}
+              className="w-full h-auto object-cover block"
+              loading="lazy"
+              onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+            />
           </div>
+        )}
+        <div className="flex items-center gap-3 mb-3">
+          <span className="text-[var(--prompt)] font-bold text-lg">
+            {project.name}
+          </span>
+          <p className="text-[var(--text)] opacity-40 text-sm">
+            {project.year}
+          </p>
         </div>
         <p className="text-[var(--text)] opacity-80 mb-4">
           {project.description}

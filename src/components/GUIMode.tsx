@@ -412,6 +412,17 @@ export default function GUIMode({ onTerminalSwitch, lang, theme, onThemeChange }
                     </span>
                   </div>
                 </div>
+                {p.image && (
+                  <div className="mb-3 border border-[var(--border)] overflow-hidden rounded bg-[var(--surface)]">
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      className="w-full h-auto object-cover block"
+                      loading="lazy"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                    />
+                  </div>
+                )}
                 <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-4">
                   {p.description}
                 </p>
