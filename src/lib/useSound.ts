@@ -78,28 +78,7 @@ export function useSound() {
     }
   }, [enabled, getCtx]);
 
-  /** Success jingle */
-  const playSuccess = useCallback(() => {
-    if (!enabled) return;
-    try {
-      const ctx = getCtx();
-      [523, 659, 784].forEach((freq, i) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.frequency.value = freq;
-        osc.type = "sine";
-        const start = ctx.currentTime + i * 0.1;
-        gain.gain.setValueAtTime(0.05, start);
-        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.15);
-        osc.start(start);
-        osc.stop(start + 0.15);
-      });
-    } catch {
-      // audio not available
-    }
-  }, [enabled, getCtx]);
 
-  return { enabled, setEnabled, playKey, playExec, playError, playSuccess };
+
+  return { enabled, setEnabled, playKey, playExec, playError };
 }

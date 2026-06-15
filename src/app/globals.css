@@ -113,11 +113,6 @@ body {
   from { width: 0%; }
 }
 
-@keyframes scanline {
-  0% { top: -100%; }
-  100% { top: 100%; }
-}
-
 .animate-fade-in {
   animation: fadeIn 0.4s ease-out forwards;
 }
@@ -128,32 +123,6 @@ body {
 
 .skill-bar {
   animation: fillBar 0.8s ease-out forwards;
-}
-
-/* ── Scanline overlay ────────────────────────────────── */
-.scanline::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(255, 255, 255, 0.015) 0px,
-    rgba(255, 255, 255, 0.015) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  pointer-events: none;
-  z-index: 50;
-}
-
-[data-theme="light"] .scanline::after {
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.015) 0px,
-    rgba(0, 0, 0, 0.015) 1px,
-    transparent 1px,
-    transparent 3px
-  );
 }
 
 /* ── Boot sequence ───────────────────────────────────── */
@@ -201,27 +170,7 @@ body {
   white-space: pre;
 }
 
-/* ── GUI Mode ─────────────────────────────────────────── */
-.gui-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  transition: border-color 0.25s ease, transform 0.25s ease;
-}
-
-.gui-card:hover {
-  border-color: var(--text-secondary);
-  transform: translateY(-1px);
-}
-
-/* Hero name — pure text, no gradient fill */
-.gui-hero-name {
-  color: var(--text);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-}
-
-/* Section title — large, uppercase, spaced */
+/* ── Section title ──────────────────────────────────── */
 .gui-section-title {
   font-size: 0.7rem;
   letter-spacing: 0.2em;
@@ -229,11 +178,6 @@ body {
   color: var(--text-dim);
   font-weight: 500;
   margin-bottom: 1.5rem;
-}
-
-/* Skill bar */
-.skill-bar-bg {
-  background: var(--border);
 }
 
 /* ── Mode switch transition ──────────────────────────── */
@@ -258,35 +202,6 @@ body {
   margin-left: 2px;
 }
 
-/* ── Navigation active indicator ─────────────────────── */
-.nav-active {
-  color: var(--text);
-}
-
-.nav-inactive {
-  color: var(--text-dim);
-}
-
-.nav-inactive:hover {
-  color: var(--text);
-}
-
-/* ── Tags / Tech badges ──────────────────────────────── */
-.tech-tag {
-  display: inline-block;
-  padding: 0.125rem 0.625rem;
-  font-size: 0.75rem;
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  font-family: "JetBrains Mono", monospace;
-  transition: border-color 0.2s ease, color 0.2s ease;
-}
-
-.tech-tag:hover {
-  border-color: var(--text-secondary);
-  color: var(--text);
-}
-
 /* ── Timeline dot ────────────────────────────────────── */
 .timeline-dot {
   width: 10px;
@@ -295,41 +210,12 @@ body {
   background: var(--border);
   border: 2px solid var(--border);
   flex-shrink: 0;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
-.timeline-dot-active {
+.group:hover .timeline-dot-active {
   background: var(--text);
   border-color: var(--text);
-}
-
-/* ── Contact icon box ────────────────────────────────── */
-.contact-icon-box {
-  width: 2.75rem;
-  height: 2.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border);
-  flex-shrink: 0;
-  transition: border-color 0.2s ease;
-}
-
-.contact-icon-box:hover {
-  border-color: var(--text-secondary);
-}
-
-/* ── Secret message (spoiler text) ───────────────────── */
-.spoiler {
-  background: var(--border);
-  color: transparent;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.spoiler:hover {
-  background: transparent;
-  color: var(--text);
 }
 
 /* ── Responsive scale for ASCII ──────────────────────── */
@@ -340,56 +226,16 @@ body {
   }
 }
 
-/* ── Glitch Takeover ─────────────────────────────────── */
-@keyframes glitchRGB {
-  0%   { transform: translate(0, 0); }
-  25%  { transform: translate(-3px, 1px); filter: invert(1); }
-  50%  { transform: translate(3px, -1px); filter: invert(1); }
-  75%  { transform: translate(-2px, -2px); filter: invert(1); }
-  100% { transform: translate(0, 0); }
+/* ── Confetti ────────────────────────────────────────── */
+@keyframes confettiFall {
+  0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
 }
 
-.glitch-rgb {
-  animation: glitchRGB 0.15s steps(2) infinite;
-}
-
-@keyframes glitchNoiseMove {
-  0%   { transform: translate(0, 0); }
-  25%  { transform: translate(-10%, 5%); }
-  50%  { transform: translate(5%, -5%); }
-  75%  { transform: translate(-5%, 10%); }
-  100% { transform: translate(10%, 0); }
-}
-
-.glitch-noise::before {
-  content: "";
+.confetti-piece {
   position: absolute;
-  inset: -50%;
-  width: 200%;
-  height: 200%;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
-  opacity: 0.1;
-  animation: glitchNoiseMove 0.2s steps(4) infinite;
-  pointer-events: none;
-}
-
-@keyframes secretReveal {
-  from { opacity: 0; transform: scale(0.95); filter: blur(4px); }
-  to { opacity: 1; transform: scale(1); filter: blur(0); }
-}
-
-.secret-reveal {
-  animation: secretReveal 0.6s ease-out forwards;
-}
-
-/* ── Scroll hint ─────────────────────────────────────── */
-@keyframes scrollHint {
-  0%, 100% { transform: translateY(0); opacity: 0.6; }
-  50% { transform: translateY(6px); opacity: 1; }
-}
-
-.scroll-hint {
-  animation: scrollHint 2s ease-in-out infinite;
+  top: -10px;
+  animation: confettiFall var(--fall-duration, 3s) ease-out var(--fall-delay, 0s) forwards;
 }
 
 /* ── Mobile / utility ────────────────────────────────── */

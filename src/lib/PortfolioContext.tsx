@@ -13,12 +13,8 @@ import {
 } from "react";
 import { portfolioData as defaultData, type PortfolioData } from "./data";
 
-/* ── Types ───────────────────────────────────────────── */
-export type { PortfolioData };
-
 interface PortfolioContextValue {
   data: PortfolioData;
-  fetchedAt?: string;
 }
 
 const PortfolioCtx = createContext<PortfolioContextValue>({
@@ -33,14 +29,12 @@ export function usePortfolio() {
 export function PortfolioProvider({
   children,
   data,
-  fetchedAt,
 }: {
   children: ReactNode;
   data?: PortfolioData;
-  fetchedAt?: string;
 }) {
   return (
-    <PortfolioCtx.Provider value={{ data: data || defaultData, fetchedAt }}>
+    <PortfolioCtx.Provider value={{ data: data || defaultData }}>
       {children}
     </PortfolioCtx.Provider>
   );

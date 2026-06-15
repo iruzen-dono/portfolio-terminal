@@ -65,7 +65,7 @@ export default function Terminal({
 
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { enabled: soundOn, setEnabled: setSoundOn, playKey, playExec, playError } = useSound();
+  const { enabled: soundOn, setEnabled: setSoundOn, playKey, playExec } = useSound();
   const { data: portfolioData } = usePortfolio();
   const [isMobile, setIsMobile] = useState(false);
   const [viewportH, setViewportH] = useState("100dvh");

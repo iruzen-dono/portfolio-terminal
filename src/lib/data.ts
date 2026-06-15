@@ -8,9 +8,6 @@ export const portfolioData = {
   location: "Lome, Togo",
   email: "juleszhou01@gmail.com",
   github: "https://github.com/iruzen-dono",
-  linkedin: "",
-  website: "",
-
   bio: [
     "Developpeur full-stack autodidacte base a Lome.",
     "Du PHP/MySQL au TypeScript/Next.js, je concois des plateformes",

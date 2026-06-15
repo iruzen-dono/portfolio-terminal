@@ -1,7 +1,7 @@
 "use client";
 
 /* ─────────────────────────────────────────────────────
-   Matrix rain canvas – shown when theme === "matrix"
+   Matrix rain canvas – shown when theme === "terminal"
    ───────────────────────────────────────────────────── */
 
 import { useEffect, useRef } from "react";

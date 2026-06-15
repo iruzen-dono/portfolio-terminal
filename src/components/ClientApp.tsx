@@ -19,7 +19,6 @@ import type { PortfolioData } from "@/lib/data";
 
 interface ClientAppProps {
   portfolioData: PortfolioData;
-  fetchedAt: string;
   initialTheme?: string;
   initialMode?: "terminal" | "gui";
 }
@@ -55,7 +54,7 @@ function HomeInner({
 
   const handleGlitchComplete = useCallback(() => {
     setGlitchActive(false);
-    setTheme("cyberpunk");
+    setTheme("terminal");
   }, []);
 
   /* Animated mode switch */
@@ -125,12 +124,11 @@ function HomeInner({
 
 export default function ClientApp({
   portfolioData,
-  fetchedAt,
   initialTheme,
   initialMode,
 }: ClientAppProps) {
   return (
-    <PortfolioProvider data={portfolioData} fetchedAt={fetchedAt}>
+    <PortfolioProvider data={portfolioData}>
       <HomeInner
         portfolioData={portfolioData}
         initialTheme={initialTheme}

@@ -28,7 +28,6 @@ export default async function Home({ searchParams }: HomeProps) {
   return (
     <ClientApp
       portfolioData={portfolioData}
-      fetchedAt={ghData.fetchedAt}
       initialTheme={initialTheme}
       initialMode={initialMode as "terminal" | "gui"}
     />
