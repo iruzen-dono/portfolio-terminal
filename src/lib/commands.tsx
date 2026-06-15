@@ -97,7 +97,17 @@ export const AVAILABLE_COMMANDS = [
   "lang",
   "stats",
   "analytics",
-
+  "github",
+  "gh",
+  "resume",
+  "cv",
+  "weather",
+  "meteo",
+  "calc",
+  "calculator",
+  "google",
+  "youtube",
+  "wiki",
 ];
 
 /* ── Main dispatcher ─────────────────────────────────── */
@@ -218,18 +228,35 @@ export function executeCommand(
         case "cv":
           return resumeCmd();
         case "weather":
-        case "meteo":
-          return weatherCmd(lang);
+            case "meteo":
+              return weatherCmd(lang);
+            case "calc":
+            case "calculator":
+              return calcCmd(args.join(" "));
+            case "google":
+              return searchCmd("https://www.google.com/search?q=", args.join("+"));
+            case "youtube":
+            case "yt":
+              return searchCmd("https://www.youtube.com/results?search_query=", args.join("+"));
+            case "wiki":
+            case "wikipedia":
+              return searchCmd("https://en.wikipedia.org/wiki/", args.join("_"));
         case "":
     case undefined:
       return { output: null };
     default:
+      const fuzzy = fuzzySuggest(cmd || "", 3);
       return {
         output: (
-          <p className="text-[var(--error)]">
+          <p className="text-[var(--error)] text-sm">
             command not found: {cmd}. Type{" "}
             <span className="text-[var(--success)]">help</span> for
             available commands.
+            {fuzzy.length > 0 && fuzzy[0] !== cmd && (
+              <span className="block text-[var(--text-dim)] text-xs mt-1">
+                Did you mean <span className="text-[var(--prompt)]">{fuzzy[0]}</span>?
+              </span>
+            )}
           </p>
         ),
       };
@@ -1614,6 +1641,86 @@ function dateCmd(lang: Lang): CommandResult {
         <p className="text-[var(--text)]">{dateStr.charAt(0).toUpperCase() + dateStr.slice(1)}</p>
         <p className="text-[var(--text-secondary)] font-mono">{timeStr}</p>
         <p className="text-[var(--text-dim)] text-xs">{tz}</p>
+      </div>
+    ),
+  };
+}
+
+/* ── Fuzzy match (Levenshtein) ──────────────────────────── */
+function levenshtein(a: string, b: string): number {
+  const m = a.length, n = b.length;
+  const dp: number[][] = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      dp[i][j] = a[i - 1] === b[j - 1]
+        ? dp[i - 1][j - 1]
+        : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+    }
+  }
+  return dp[m][n];
+}
+
+export function fuzzySuggest(input: string, maxResults = 5): string[] {
+  const lower = input.toLowerCase();
+  if (!lower) return [];
+  const scored = AVAILABLE_COMMANDS.map((cmd) => ({
+    cmd,
+    prefix: cmd.startsWith(lower),
+    dist: levenshtein(cmd, lower),
+  }));
+  scored.sort((a, b) => {
+    if (a.prefix !== b.prefix) return a.prefix ? -1 : 1;
+    if (a.dist !== b.dist) return a.dist - b.dist;
+    return a.cmd.localeCompare(b.cmd);
+  });
+  return scored.slice(0, maxResults).map((s) => s.cmd);
+}
+
+/* ── calc / calculator ─────────────────────────────────── */
+function calcCmd(expr: string): CommandResult {
+  if (!expr) {
+    return {
+      output: <p className="text-[var(--text-dim)] text-sm">Usage: calc &lt;expression&gt;</p>,
+    };
+  }
+  const safe = expr.replace(/[^0-9+\-*/.()%^, ]/g, "");
+  if (!safe || safe.length < 1) {
+    return {
+      output: <p className="text-[var(--error)] text-sm">Invalid expression.</p>,
+    };
+  }
+  try {
+    const fn = new Function(`"use strict"; return (${safe});`);
+    const result = fn();
+    return {
+      output: (
+        <div className="text-sm">
+          <span className="text-[var(--text-dim)]">{expr} = </span>
+          <span className="text-[var(--prompt)] font-bold">{result}</span>
+        </div>
+      ),
+    };
+  } catch {
+    return { output: <p className="text-[var(--error)] text-sm">Error evaluating expression.</p> };
+  }
+}
+
+/* ── google / youtube / wiki ─────────────────────────────── */
+function searchCmd(baseUrl: string, query: string): CommandResult {
+  if (!query) {
+    return { output: <p className="text-[var(--text-dim)] text-sm">Usage: google &lt;query&gt;</p> };
+  }
+  const url = baseUrl + encodeURIComponent(query.replace(/\+/g, " "));
+  return {
+    output: (
+      <div className="text-sm">
+        <p className="text-[var(--text-dim)] mb-1">
+          Opening search for <span className="text-[var(--text)]">{query.replace(/\+/g, " ")}</span>
+        </p>
+        <a href={url} target="_blank" rel="noopener noreferrer"
+           className="text-[var(--text-dim)] hover:text-[var(--text)] underline underline-offset-2 text-xs">{url}</a>
       </div>
     ),
   };

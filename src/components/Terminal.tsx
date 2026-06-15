@@ -19,6 +19,7 @@ import {
   executeCommand,
   getWelcomeMessage,
   AVAILABLE_COMMANDS,
+  fuzzySuggest,
 } from "@/lib/commands";
 import { useSound } from "@/lib/useSound";
 import { usePortfolio } from "@/lib/PortfolioContext";
@@ -266,13 +267,11 @@ export default function Terminal({
         return;
       }
 
-      /* Tab autocomplete */
+      /* Tab autocomplete — fuzzy */
       if (e.key === "Tab") {
         e.preventDefault();
         if (!input) return;
-        const matches = AVAILABLE_COMMANDS.filter((c) =>
-          c.startsWith(input.toLowerCase())
-        );
+        const matches = fuzzySuggest(input, 8);
         if (matches.length === 1) {
           setInput(matches[0]);
         } else if (matches.length > 1) {
@@ -281,12 +280,19 @@ export default function Terminal({
             command: "",
             path: currentPath,
             output: (
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2 text-sm font-mono">
                 {matches.map((m) => (
-                  <span key={m} className="text-[var(--success)]">
-                    {m}
+                  <span key={m} className={
+                    m === matches[0] ? "text-[var(--prompt)]" : "text-[var(--text-dim)]"
+                  }>
+                    {m === matches[0] ? `→ ${m}` : m}
                   </span>
                 ))}
+                {!AVAILABLE_COMMANDS.includes(input.toLowerCase()) && (
+                  <span className="text-[var(--text-dim)] opacity-50 text-xs w-full mt-1">
+                    Did you mean one of these?
+                  </span>
+                )}
               </div>
             ),
           };
