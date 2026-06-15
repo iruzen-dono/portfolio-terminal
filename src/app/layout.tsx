@@ -12,14 +12,32 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Jules Zhou | Portfolio Terminal",
   description:
-    "Portfolio interactif style terminal — Développeur Full-Stack",
-  keywords: ["portfolio", "developer", "terminal", "full-stack", "interactive"],
+    "Développeur Full-Stack specialise React, TypeScript, Kotlin et Java. Decouvrez mes projets, competences et experience via ce portfolio interactif style terminal.",
+  keywords: [
+    "portfolio", "développeur", "full-stack", "react", "nextjs",
+    "typescript", "kotlin", "java", "spring-boot", "kmp",
+    "togo", "lome", "jules zhou", "developer", "terminal",
+  ],
   icons: { icon: "/favicon.svg" },
   openGraph: {
     title: "Jules Zhou | Portfolio Terminal",
     description:
-      "Portfolio interactif style terminal — Développeur Full-Stack",
+      "Développeur Full-Stack — Portfolio interactif style terminal. React, TypeScript, Kotlin, Java.",
     type: "website",
+    locale: "fr_FR",
+    siteName: "Jules Zhou",
+    url: "https://portfolio-terminal-lake.vercel.app",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Jules Zhou | Portfolio Terminal",
+    description:
+      "Développeur Full-Stack — Portfolio interactif style terminal.",
+    creator: "@iruzen_dono",
+  },
+  robots: { index: true, follow: true },
+  alternates: {
+    canonical: "https://portfolio-terminal-lake.vercel.app",
   },
 };
 

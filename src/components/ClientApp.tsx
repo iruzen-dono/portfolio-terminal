@@ -3,7 +3,8 @@
 /* ─────────────────────────────────────────────────────
    ClientApp — all client-side logic (boot, terminal,
    GUI, theme, konami, transitions).
-   Receives merged portfolio data from the server component.
+   Receives merged portfolio data from the server component
+   and optional initial state from URL params.
    ───────────────────────────────────────────────────── */
 
 import { useState, useEffect, useCallback } from "react";
@@ -19,11 +20,24 @@ import type { PortfolioData } from "@/lib/data";
 interface ClientAppProps {
   portfolioData: PortfolioData;
   fetchedAt: string;
+  initialTheme?: string;
+  initialMode?: "terminal" | "gui";
 }
 
-function HomeInner({ portfolioData }: { portfolioData: PortfolioData }) {
-  const [theme, setTheme] = useState("dark");
-  const [mode, setMode] = useState<"boot" | "terminal" | "gui">("boot");
+function HomeInner({
+  portfolioData,
+  initialTheme: fallbackTheme,
+  initialMode: fallbackMode,
+}: {
+  portfolioData: PortfolioData;
+  initialTheme?: string;
+  initialMode?: "terminal" | "gui";
+}) {
+  const [theme, setTheme] = useState(fallbackTheme || "dark");
+  const [mode, setMode] = useState<"boot" | "terminal" | "gui">(
+    // Skip boot when initialMode is set from URL
+    fallbackMode ? fallbackMode : "boot"
+  );
   const [transitioning, setTransitioning] = useState(false);
   const [lang, setLang] = useState<"fr" | "en">("fr");
   const [glitchActive, setGlitchActive] = useState(false);
@@ -58,7 +72,8 @@ function HomeInner({ portfolioData }: { portfolioData: PortfolioData }) {
 
   return (
     <main className={`relative ${isGUI ? "min-h-screen" : "h-dvh overflow-hidden"}`}>
-      {theme === "matrix" && <MatrixRain />}
+      {/* Matrix rain only on terminal theme in terminal mode */}
+      {theme === "terminal" && mode === "terminal" && <MatrixRain />}
 
       {/* Konami Easter Egg — Glitch Takeover */}
       <GlitchTakeover active={glitchActive} onComplete={handleGlitchComplete} />
@@ -96,17 +111,31 @@ function HomeInner({ portfolioData }: { portfolioData: PortfolioData }) {
             onLangChange={setLang}
           />
         ) : (
-          <GUIMode onTerminalSwitch={() => switchMode("terminal")} lang={lang} />
+          <GUIMode
+            onTerminalSwitch={() => switchMode("terminal")}
+            lang={lang}
+            theme={theme}
+            onThemeChange={setTheme}
+          />
         )}
       </div>
     </main>
   );
 }
 
-export default function ClientApp({ portfolioData, fetchedAt }: ClientAppProps) {
+export default function ClientApp({
+  portfolioData,
+  fetchedAt,
+  initialTheme,
+  initialMode,
+}: ClientAppProps) {
   return (
     <PortfolioProvider data={portfolioData} fetchedAt={fetchedAt}>
-      <HomeInner portfolioData={portfolioData} />
+      <HomeInner
+        portfolioData={portfolioData}
+        initialTheme={initialTheme}
+        initialMode={initialMode}
+      />
     </PortfolioProvider>
   );
 }

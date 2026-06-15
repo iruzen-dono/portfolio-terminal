@@ -92,9 +92,13 @@ const CATEGORY_LABELS: Record<string, string> = {
 interface GUIModeProps {
   onTerminalSwitch: () => void;
   lang: Lang;
+  theme: string;
+  onThemeChange: (t: string) => void;
 }
 
-export default function GUIMode({ onTerminalSwitch, lang }: GUIModeProps) {
+const VALID_THEMES = ["dark", "light", "terminal"];
+
+export default function GUIMode({ onTerminalSwitch, lang, theme, onThemeChange }: GUIModeProps) {
   const { data: portfolioData } = usePortfolio();
   const { name, title, location, bio, skills, projects, experience, contact } =
     portfolioData;
@@ -102,6 +106,15 @@ export default function GUIMode({ onTerminalSwitch, lang }: GUIModeProps) {
   const [mobileNav, setMobileNav] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const [filterTech, setFilterTech] = useState<string | null>(null);
+
+  /* ── All unique techs for project filtering ─────────── */
+  const allTechs = [...new Set(projects.flatMap((p) => p.tech))].sort();
+
+  /* ── Filtered projects ──────────────────────────────── */
+  const filteredProjects = filterTech
+    ? projects.filter((p) => p.tech.includes(filterTech))
+    : projects;
 
   /* ── Track scroll ──────────────────────────────────── */
   useEffect(() => {
@@ -181,9 +194,25 @@ export default function GUIMode({ onTerminalSwitch, lang }: GUIModeProps) {
                 {getNavLabel(s, lang)}
               </button>
             ))}
+            {/* theme toggle */}
+            <div className="ml-4 flex items-center gap-0.5 border-l border-[var(--border)] pl-4">
+              {VALID_THEMES.map((t) => (
+                <button
+                  key={t}
+                  onClick={() => onThemeChange(t)}
+                  className={`text-[10px] uppercase tracking-widest px-1.5 py-1 transition-all ${
+                    theme === t
+                      ? "text-[var(--text)] font-bold"
+                      : "text-[var(--text-dim)] hover:text-[var(--text)]"
+                  }`}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
             <button
               onClick={onTerminalSwitch}
-              className="ml-6 text-xs px-3 py-1.5 border border-[var(--text-dim)] text-[var(--text-dim)] hover:border-[var(--text)] hover:text-[var(--text)] transition-colors font-mono"
+              className="ml-4 text-xs px-3 py-1.5 border border-[var(--text-dim)] text-[var(--text-dim)] hover:border-[var(--text)] hover:text-[var(--text)] transition-colors font-mono"
             >
               &gt;_
             </button>
@@ -211,6 +240,22 @@ export default function GUIMode({ onTerminalSwitch, lang }: GUIModeProps) {
                 {getNavLabel(s, lang)}
               </button>
             ))}
+            {/* mobile theme toggle */}
+            <div className="flex gap-1 px-2 py-2 border-t border-[var(--border)] mt-2 pt-3">
+              {VALID_THEMES.map((t) => (
+                <button
+                  key={t}
+                  onClick={() => onThemeChange(t)}
+                  className={`text-[10px] uppercase tracking-widest px-2 py-1 transition-all ${
+                    theme === t
+                      ? "text-[var(--text)] font-bold"
+                      : "text-[var(--text-dim)] hover:text-[var(--text)]"
+                  }`}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
             <button
               onClick={onTerminalSwitch}
               className="block w-full text-left text-xs px-2 py-2 text-[var(--text-dim)] font-mono"
@@ -323,8 +368,36 @@ export default function GUIMode({ onTerminalSwitch, lang }: GUIModeProps) {
       <Section id="projects" className="border-t border-[var(--border)]">
         <div className="max-w-6xl mx-auto px-6 py-24">
           <p className="gui-section-title">{t("projectsTitle", lang)}</p>
+
+          {/* tech filter pills */}
+          <div className="flex flex-wrap gap-1.5 mb-8 mt-4">
+            <button
+              onClick={() => setFilterTech(null)}
+              className={`text-xs px-2.5 py-1 border font-mono transition-colors ${
+                filterTech === null
+                  ? "border-[var(--text)] text-[var(--text)]"
+                  : "border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--text)] hover:text-[var(--text)]"
+              }`}
+            >
+              all
+            </button>
+            {allTechs.map((tech) => (
+              <button
+                key={tech}
+                onClick={() => setFilterTech(filterTech === tech ? null : tech)}
+                className={`text-xs px-2.5 py-1 border font-mono transition-colors ${
+                  filterTech === tech
+                    ? "border-[var(--text)] text-[var(--text)]"
+                    : "border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--text)] hover:text-[var(--text)]"
+                }`}
+              >
+                {tech}
+              </button>
+            ))}
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[var(--border)]">
-            {projects.map((p) => (
+            {filteredProjects.map((p) => (
               <div
                 key={p.id}
                 className="bg-[var(--bg)] p-6 sm:p-8 hover:bg-[var(--surface)] transition-colors duration-300"
