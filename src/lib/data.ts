@@ -18,6 +18,8 @@ export const portfolioData = {
     "la sécurité et l'experience utilisateur.",
     "",
     "Toujours en train d'apprendre, toujours en train de construire.",
+    "J'opere et gere un agent IA personnel (Hermes) deploye sur Telegram, Discord, CLI et desktop --",
+    "de l'installation a la configuration des outils, skills et taches planifiees.",
   ],
 
   skills: [
@@ -39,6 +41,7 @@ export const portfolioData = {
     { name: "Git / GitHub", level: 80, category: "tools" },
     { name: "Docker", level: 72, category: "devops" },
     { name: "Ktor", level: 70, category: "backend" },
+    { name: "AI Agents", level: 85, category: "tools" },
   ],
 
   projects: [
@@ -76,8 +79,8 @@ export const portfolioData = {
       id: "hermes-bot",
       name: "Hermes Bot",
       description:
-        "Agent personnel multi-plateforme (Telegram, Discord, Slack) avec memoire persistante, execution de taches planifiees et interface CLI/TUI. Plugin et skill system.",
-      tech: ["Python", "Hermes Agent", "Telegram API", "Discord API", "SQLite", "Docker"],
+        "Deploiement et gestion d'un agent IA personnel (Hermes Agent) operationnel sur Telegram, Discord, Slack, SMS et desktop. Configuration des outils, skills, memoire persistante, taches CRON planifiees, plugins et pipeline CI/CD. Administration au quotidien d'un systeme agentique complet.",
+      tech: ["Python", "Hermes Agent", "Telegram API", "Discord API", "SQLite", "Docker", "CLI/TUI", "Webhooks"],
       github: "https://github.com/iruzen-dono/iruzen-dono",
       live: "",
       year: 2025,
@@ -120,7 +123,7 @@ export const portfolioData = {
       company: "Projets personnels",
       period: "2025 — Present",
       description:
-        "Conception et developpement de KeycePass (KMP), XEARN (micro-revenus), Hermes Bot et portfolios interactifs. Architectures multiplateforme, securite avancee et integrations API.",
+        "Developpement de KeycePass (KMP), XEARN (micro-revenus), Hermes Bot (agent IA multi-plateforme). Administration d'un systeme agentique complet : deploiement, outils, skills, taches planifiees et monitoring.",
     },
     {
       role: "Developpeur Web PHP",
