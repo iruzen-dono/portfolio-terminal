@@ -28,9 +28,9 @@ import type { Lang } from "@/lib/i18n";
 
 /* ── Quick commands shown on mobile ──────────────────── */
 const QUICK_COMMANDS = [
-  "help", "about", "skills", "projects", "contact",
-  "experience", "theme", "neofetch", "clear", "hack",
-  "gui", "cowsay", "fortune", "history",
+  "/help", "/about", "/skills", "/projects", "/contact",
+  "/experience", "/theme", "/neofetch", "/clear", "/hack",
+  "/gui", "/cowsay", "/fortune", "/history",
 ];
 
 /* ── Types ───────────────────────────────────────────── */

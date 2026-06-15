@@ -121,7 +121,8 @@ export function executeCommand(
   const data = portfolioData || defaultPortfolioData;
   const fs = buildFileSystem(data);
   const trimmed = input.trim();
-  const [cmd, ...args] = trimmed.split(/\s+/);
+  // Strip leading / for slash-command syntax
+  const [cmd, ...args] = trimmed.replace(/^\//, "").split(/\s+/);
   const command = cmd?.toLowerCase();
 
   switch (command) {
@@ -249,10 +250,10 @@ export function executeCommand(
       return {
         output: (
           <p className="text-[var(--error)] text-sm">
-            command not found: {cmd}. Type{" "}
-            <span className="text-[var(--success)]">help</span> for
+            command not found: /{cmd}. Type{" "}
+            <span className="text-[var(--success)]">/help</span> for
             available commands.
-            {fuzzy.length > 0 && fuzzy[0] !== cmd && (
+            {fuzzy.length > 0 && fuzzy[0] !== `/${cmd}` && (
               <span className="block text-[var(--text-dim)] text-xs mt-1">
                 Did you mean <span className="text-[var(--prompt)]">{fuzzy[0]}</span>?
               </span>
@@ -267,40 +268,43 @@ export function executeCommand(
 
 function helpCmd(): CommandResult {
   const cmds: [string, string][] = [
-    ["about", "Learn about me"],
-    ["skills", "View my technical skills"],
-    ["projects", "Browse my projects"],
-    ["open <id>", "View project details"],
-    ["experience", "Work history"],
-    ["contact", "Get my contact info"],
-    ["theme <name>", "Switch theme (dark / light / terminal)"],
-        ["gui", "Switch to GUI mode"],
-        ["stats", "GitHub profile + portfolio stats"],
-        ["github", "List repos with stars and language"],
-        ["resume", "Download my resume / CV"],
-        ["weather", "Current weather in Lome"],
-        ["neofetch", "System info (portfolio style)"],
-    ["ls [dir]", "List directory contents"],
-    ["cd <dir>", "Change directory"],
-    ["cat <file>", "Read file contents"],
-    ["tree [dir]", "Show directory tree"],
-    ["grep <pat>", "Search files for pattern"],
-    ["pwd", "Print working directory"],
-    ["whoami", "Current user info"],
-    ["history", "Command history"],
-    ["banner <txt>", "ASCII art text banner"],
-    ["clear", "Clear terminal"],
-    ["sound on|off", "Toggle sound effects"],
-    ["lang fr|en", "Switch language / Changer la langue"],
-    ["analytics", "Your session analytics"],
-        ["man <cmd>", "Manual page for a command"],
-        ["date", "Show current date and time"],
-        ["echo <msg>", "Print a message"],
-        ["hack", "Try it..."],
-        ["cowsay <msg>", "Moo!"],
-    ["fortune", "Random dev wisdom"],
-    ["sudo hire-me", "You know what to do"],
-
+    ["/about", "Learn about me"],
+    ["/skills", "View my technical skills"],
+    ["/projects", "Browse my projects"],
+    ["/open <id>", "View project details"],
+    ["/experience", "Work history"],
+    ["/contact", "Get my contact info"],
+    ["/theme <name>", "Switch theme (dark / light / terminal)"],
+    ["/gui", "Switch to GUI mode"],
+    ["/stats", "GitHub profile + portfolio stats"],
+    ["/github", "List repos with stars and language"],
+    ["/resume", "Download my resume / CV"],
+    ["/weather", "Current weather in Lome"],
+    ["/neofetch", "System info (portfolio style)"],
+    ["/ls [dir]", "List directory contents"],
+    ["/cd <dir>", "Change directory"],
+    ["/cat <file>", "Read file contents"],
+    ["/tree [dir]", "Show directory tree"],
+    ["/grep <pat>", "Search files for pattern"],
+    ["/pwd", "Print working directory"],
+    ["/whoami", "Current user info"],
+    ["/history", "Command history"],
+    ["/banner <txt>", "ASCII art text banner"],
+    ["/clear", "Clear terminal"],
+    ["/sound on|off", "Toggle sound effects"],
+    ["/lang fr|en", "Switch language / Changer la langue"],
+    ["/analytics", "Your session analytics"],
+    ["/man <cmd>", "Manual page for a command"],
+    ["/date", "Show current date and time"],
+    ["/echo <msg>", "Print a message"],
+    ["/calc <expr>", "Evaluate a math expression"],
+    ["/google <q>", "Search Google"],
+    ["/youtube <q>", "Search YouTube"],
+    ["/wiki <q>", "Search Wikipedia"],
+    ["/hack", "Try it..."],
+    ["/cowsay <msg>", "Moo!"],
+    ["/fortune", "Random dev wisdom"],
+    ["/sudo hire-me", "You know what to do"],
   ];
 
   return {
@@ -1663,7 +1667,9 @@ function levenshtein(a: string, b: string): number {
 }
 
 export function fuzzySuggest(input: string, maxResults = 5): string[] {
-  const lower = input.toLowerCase();
+  // Strip leading slash for matching
+  const raw = input.startsWith("/") ? input.slice(1) : input;
+  const lower = raw.toLowerCase();
   if (!lower) return [];
   const scored = AVAILABLE_COMMANDS.map((cmd) => ({
     cmd,
@@ -1675,7 +1681,7 @@ export function fuzzySuggest(input: string, maxResults = 5): string[] {
     if (a.dist !== b.dist) return a.dist - b.dist;
     return a.cmd.localeCompare(b.cmd);
   });
-  return scored.slice(0, maxResults).map((s) => s.cmd);
+  return scored.slice(0, maxResults).map((s) => `/${s.cmd}`);
 }
 
 /* ── calc / calculator ─────────────────────────────────── */
