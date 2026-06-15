@@ -33,7 +33,7 @@ const TYPING_LINES = [
   { text: "", delay: 1800 },
 ];
 
-const SECRET_MSG = "You found the secret.\nYou're hired. 🎉";
+const SECRET_MSG = "You found the secret.\nYou're hired.";
 
 export default function GlitchTakeover({ active, onComplete }: GlitchTakeoverProps) {
   const [phase, setPhase] = useState<Phase>("done");

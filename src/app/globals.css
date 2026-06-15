@@ -5,106 +5,53 @@
 /* ── Theme Variables ─────────────────────────────────── */
 :root {
   --bg: #0a0a0a;
-  --terminal-bg: #1a1a2e;
-  --text: #e0e0e0;
-  --prompt: #00d4ff;
-  --accent: #7c3aed;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --error: #ef4444;
-  --border: #2a2a4a;
-  --selection: rgba(124, 58, 237, 0.3);
+  --terminal-bg: #111111;
+  --surface: #1a1a1a;
+  --text: #e8e8e8;
+  --text-secondary: #888888;
+  --text-dim: #555555;
+  --prompt: #ffffff;
+  --accent: #ffffff;
+  --accent-muted: #2a2a2a;
+  --success: #4a4a4a;
+  --warning: #666666;
+  --error: #999999;
+  --border: #222222;
+  --selection: rgba(255, 255, 255, 0.08);
 }
 
 [data-theme="light"] {
   --bg: #f5f5f5;
   --terminal-bg: #ffffff;
-  --text: #1a1a2e;
-  --prompt: #2563eb;
-  --accent: #7c3aed;
-  --success: #059669;
-  --warning: #d97706;
-  --error: #dc2626;
-  --border: #d1d5db;
-  --selection: rgba(37, 99, 235, 0.2);
+  --surface: #eeeeee;
+  --text: #111111;
+  --text-secondary: #666666;
+  --text-dim: #999999;
+  --prompt: #000000;
+  --accent: #000000;
+  --accent-muted: #dddddd;
+  --success: #888888;
+  --warning: #999999;
+  --error: #666666;
+  --border: #d4d4d4;
+  --selection: rgba(0, 0, 0, 0.08);
 }
 
-[data-theme="matrix"] {
+[data-theme="terminal"] {
   --bg: #000000;
-  --terminal-bg: #000a00;
-  --text: #00ff41;
+  --terminal-bg: #000000;
+  --surface: #080808;
+  --text: #cccccc;
+  --text-secondary: #666666;
+  --text-dim: #333333;
   --prompt: #00ff41;
-  --accent: #008f11;
-  --success: #00ff41;
-  --warning: #00cc33;
-  --error: #ff0000;
-  --border: #003b00;
-  --selection: rgba(0, 255, 65, 0.2);
-}
-
-[data-theme="dracula"] {
-  --bg: #1e1f29;
-  --terminal-bg: #282a36;
-  --text: #f8f8f2;
-  --prompt: #bd93f9;
-  --accent: #ff79c6;
-  --success: #50fa7b;
-  --warning: #f1fa8c;
-  --error: #ff5555;
-  --border: #44475a;
-  --selection: rgba(189, 147, 249, 0.3);
-}
-
-[data-theme="nord"] {
-  --bg: #2e3440;
-  --terminal-bg: #3b4252;
-  --text: #eceff4;
-  --prompt: #88c0d0;
-  --accent: #5e81ac;
-  --success: #a3be8c;
-  --warning: #ebcb8b;
-  --error: #bf616a;
-  --border: #4c566a;
-  --selection: rgba(136, 192, 208, 0.25);
-}
-
-[data-theme="retro"] {
-  --bg: #1a0a00;
-  --terminal-bg: #0d0500;
-  --text: #ffb000;
-  --prompt: #ffb000;
-  --accent: #ff8c00;
-  --success: #ffb000;
-  --warning: #ff6600;
-  --error: #ff3300;
-  --border: #3d2200;
-  --selection: rgba(255, 176, 0, 0.25);
-}
-
-[data-theme="cyberpunk"] {
-  --bg: #0a0014;
-  --terminal-bg: #120024;
-  --text: #f0e6ff;
-  --prompt: #ff2a6d;
-  --accent: #05d9e8;
-  --success: #01ffc3;
-  --warning: #f0e600;
-  --error: #ff2a6d;
-  --border: #2a1a4a;
-  --selection: rgba(5, 217, 232, 0.25);
-}
-
-[data-theme="solarized"] {
-  --bg: #fdf6e3;
-  --terminal-bg: #eee8d5;
-  --text: #586e75;
-  --prompt: #268bd2;
-  --accent: #6c71c4;
-  --success: #859900;
-  --warning: #b58900;
-  --error: #dc322f;
-  --border: #93a1a1;
-  --selection: rgba(38, 139, 210, 0.2);
+  --accent: #00ff41;
+  --accent-muted: #003b00;
+  --success: #00cc33;
+  --warning: #999900;
+  --error: #ff4444;
+  --border: #1a1a1a;
+  --selection: rgba(0, 255, 65, 0.15);
 }
 
 /* ── Base ────────────────────────────────────────────── */
@@ -128,6 +75,8 @@ body {
 body {
   background: var(--bg);
   color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
@@ -136,112 +85,75 @@ body {
 
 /* ── Scrollbar ───────────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: var(--border);
-  border-radius: 3px;
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
+  background: var(--text-dim);
 }
 
 /* ── Animations ──────────────────────────────────────── */
-@keyframes blink {
-  0%,
-  50% {
-    opacity: 1;
-  }
-  51%,
-  100% {
-    opacity: 0;
-  }
-}
-
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes glow {
-  0%,
-  100% {
-    text-shadow: 0 0 5px var(--prompt);
-  }
-  50% {
-    text-shadow: 0 0 20px var(--prompt), 0 0 40px var(--prompt);
-  }
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes fillBar {
-  from {
-    width: 0%;
-  }
+  from { width: 0%; }
 }
 
 @keyframes scanline {
-  0% {
-    top: -100%;
-  }
-  100% {
-    top: 100%;
-  }
+  0% { top: -100%; }
+  100% { top: 100%; }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.3s ease-out forwards;
+  animation: fadeIn 0.4s ease-out forwards;
 }
 
 .animate-slide-in {
   animation: slideIn 0.3s ease-out forwards;
 }
 
-.cursor-blink {
-  animation: blink 1s step-end infinite;
-}
-
-.text-glow {
-  animation: glow 2s ease-in-out infinite;
-}
-
 .skill-bar {
-  animation: fillBar 1s ease-out forwards;
+  animation: fillBar 0.8s ease-out forwards;
 }
 
-/* ── Scanline overlay (for retro CRT feel) ───────────── */
+/* ── Scanline overlay ────────────────────────────────── */
 .scanline::after {
   content: "";
   position: absolute;
   inset: 0;
   background: repeating-linear-gradient(
     0deg,
-    rgba(0, 0, 0, 0.03) 0px,
-    rgba(0, 0, 0, 0.03) 1px,
+    rgba(255, 255, 255, 0.015) 0px,
+    rgba(255, 255, 255, 0.015) 1px,
     transparent 1px,
-    transparent 2px
+    transparent 3px
   );
   pointer-events: none;
   z-index: 50;
+}
+
+[data-theme="light"] .scanline::after {
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.015) 0px,
+    rgba(0, 0, 0, 0.015) 1px,
+    transparent 1px,
+    transparent 3px
+  );
 }
 
 /* ── Boot sequence ───────────────────────────────────── */
@@ -264,50 +176,6 @@ body {
   animation: bootCursor 0.8s step-end infinite;
 }
 
-/* ── Confetti ────────────────────────────────────────── */
-@keyframes confettiFall {
-  0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-}
-
-.confetti-piece {
-  position: fixed;
-  top: 0;
-  width: 10px;
-  height: 10px;
-  z-index: 9999;
-  pointer-events: none;
-  animation: confettiFall var(--fall-duration, 3s) ease-in forwards;
-  animation-delay: var(--fall-delay, 0s);
-}
-
-/* ── Retro theme CRT glow ────────────────────────────── */
-[data-theme="retro"] .scanline::after {
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(255, 176, 0, 0.03) 0px,
-    rgba(255, 176, 0, 0.03) 1px,
-    transparent 1px,
-    transparent 2px
-  );
-}
-
-[data-theme="retro"] body {
-  text-shadow: 0 0 5px rgba(255, 176, 0, 0.4);
-}
-
-/* ── Cyberpunk neon glow ─────────────────────────────── */
-[data-theme="cyberpunk"] .scanline::after {
-  background:
-    repeating-linear-gradient(
-      0deg,
-      rgba(5, 217, 232, 0.02) 0px,
-      rgba(5, 217, 232, 0.02) 1px,
-      transparent 1px,
-      transparent 3px
-    );
-}
-
 /* ── Hack animation ──────────────────────────────────── */
 @keyframes hackGlitch {
   0% { clip-path: inset(40% 0 61% 0); transform: translate(-2px, 2px); }
@@ -322,7 +190,7 @@ body {
   animation: hackGlitch 0.3s linear infinite;
 }
 
-/* ── Steam Locomotive (sl) ───────────────────────────── */
+/* ── Train (sl) ──────────────────────────────────────── */
 @keyframes trainMove {
   from { transform: translateX(100vw); }
   to { transform: translateX(-100%); }
@@ -334,37 +202,44 @@ body {
 }
 
 /* ── GUI Mode ─────────────────────────────────────────── */
-
-/* Gradient animated text for hero name */
-.gui-gradient-text {
-  background: linear-gradient(135deg, var(--prompt) 0%, var(--accent) 50%, var(--prompt) 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: gradientShift 4s ease-in-out infinite, fadeIn 0.5s ease-out forwards;
-}
-
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% center; }
-  50% { background-position: 200% center; }
-}
-
-/* Card hover glow tracking */
 .gui-card {
-  background: var(--terminal-bg);
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: border-color 0.25s ease, transform 0.25s ease;
 }
 
 .gui-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  border-color: var(--text-secondary);
+  transform: translateY(-1px);
+}
+
+/* Hero name — pure text, no gradient fill */
+.gui-hero-name {
+  color: var(--text);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+/* Section title — large, uppercase, spaced */
+.gui-section-title {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+/* Skill bar */
+.skill-bar-bg {
+  background: var(--border);
 }
 
 /* ── Mode switch transition ──────────────────────────── */
 @keyframes modeSwitchDot {
-  0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
-  40% { opacity: 1; transform: scale(1.3); }
+  0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+  40% { opacity: 1; transform: scale(1); }
 }
 
 .mode-switch-dot {
@@ -380,11 +255,144 @@ body {
 .typewriter-cursor {
   border-right: 3px solid var(--prompt);
   animation: typewriterCursor 0.7s step-end infinite;
+  margin-left: 2px;
 }
 
-/* ── Mobile-specific ─────────────────────────────────── */
+/* ── Navigation active indicator ─────────────────────── */
+.nav-active {
+  color: var(--text);
+}
 
-/* Hide scrollbar on quick-command bar */
+.nav-inactive {
+  color: var(--text-dim);
+}
+
+.nav-inactive:hover {
+  color: var(--text);
+}
+
+/* ── Tags / Tech badges ──────────────────────────────── */
+.tech-tag {
+  display: inline-block;
+  padding: 0.125rem 0.625rem;
+  font-size: 0.75rem;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-family: "JetBrains Mono", monospace;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.tech-tag:hover {
+  border-color: var(--text-secondary);
+  color: var(--text);
+}
+
+/* ── Timeline dot ────────────────────────────────────── */
+.timeline-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+  transition: background 0.3s ease;
+}
+
+.timeline-dot-active {
+  background: var(--text);
+  border-color: var(--text);
+}
+
+/* ── Contact icon box ────────────────────────────────── */
+.contact-icon-box {
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+  transition: border-color 0.2s ease;
+}
+
+.contact-icon-box:hover {
+  border-color: var(--text-secondary);
+}
+
+/* ── Secret message (spoiler text) ───────────────────── */
+.spoiler {
+  background: var(--border);
+  color: transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.spoiler:hover {
+  background: transparent;
+  color: var(--text);
+}
+
+/* ── Responsive scale for ASCII ──────────────────────── */
+@media (max-width: 639px) {
+  pre {
+    font-size: 7px !important;
+    line-height: 1.2 !important;
+  }
+}
+
+/* ── Glitch Takeover ─────────────────────────────────── */
+@keyframes glitchRGB {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-3px, 1px); filter: invert(1); }
+  50%  { transform: translate(3px, -1px); filter: invert(1); }
+  75%  { transform: translate(-2px, -2px); filter: invert(1); }
+  100% { transform: translate(0, 0); }
+}
+
+.glitch-rgb {
+  animation: glitchRGB 0.15s steps(2) infinite;
+}
+
+@keyframes glitchNoiseMove {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-10%, 5%); }
+  50%  { transform: translate(5%, -5%); }
+  75%  { transform: translate(-5%, 10%); }
+  100% { transform: translate(10%, 0); }
+}
+
+.glitch-noise::before {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  opacity: 0.1;
+  animation: glitchNoiseMove 0.2s steps(4) infinite;
+  pointer-events: none;
+}
+
+@keyframes secretReveal {
+  from { opacity: 0; transform: scale(0.95); filter: blur(4px); }
+  to { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+.secret-reveal {
+  animation: secretReveal 0.6s ease-out forwards;
+}
+
+/* ── Scroll hint ─────────────────────────────────────── */
+@keyframes scrollHint {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(6px); opacity: 1; }
+}
+
+.scroll-hint {
+  animation: scrollHint 2s ease-in-out infinite;
+}
+
+/* ── Mobile / utility ────────────────────────────────── */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -393,151 +401,17 @@ body {
   display: none;
 }
 
-/* Safe area for bottom bar (notch devices) */
 .safe-area-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-/* Prevent iOS rubber-band over-scroll */
 html, body {
   overscroll-behavior: none;
   -webkit-overflow-scrolling: touch;
 }
 
-/* dvh fallback: ensure h-dvh works on older browsers */
 @supports not (height: 100dvh) {
   .h-dvh {
     height: 100vh;
   }
-}
-
-/* Scale ASCII art on small screens */
-@media (max-width: 639px) {
-  pre {
-    font-size: 7px !important;
-    line-height: 1.2 !important;
-  }
-
-  /* Tighter spacing on mobile */
-  .mb-3 { margin-bottom: 0.5rem; }
-}
-
-/* ── Glitch Takeover (Konami easter egg) ─────────────── */
-
-/* RGB channel split */
-.glitch-takeover-rgb {
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 255, 0, 0.03) 0px,
-    transparent 2px,
-    transparent 4px
-  );
-  mix-blend-mode: screen;
-  animation: glitchRGB 0.15s steps(2) infinite;
-}
-
-@keyframes glitchRGB {
-  0%   { transform: translate(0, 0); }
-  25%  { transform: translate(-4px, 2px); filter: hue-rotate(90deg); }
-  50%  { transform: translate(3px, -1px); filter: hue-rotate(180deg); }
-  75%  { transform: translate(-2px, -3px); filter: hue-rotate(270deg); }
-  100% { transform: translate(0, 0); }
-}
-
-/* Scan lines overlay */
-.glitch-takeover-scanlines {
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0px,
-    transparent 2px,
-    rgba(0, 0, 0, 0.3) 2px,
-    rgba(0, 0, 0, 0.3) 4px
-  );
-  pointer-events: none;
-}
-
-/* Random flash */
-.glitch-takeover-flash {
-  animation: glitchFlash 0.3s steps(1) infinite;
-  pointer-events: none;
-}
-
-@keyframes glitchFlash {
-  0%, 90%  { background: transparent; }
-  91%      { background: rgba(255, 255, 255, 0.15); }
-  93%      { background: transparent; }
-  97%      { background: rgba(0, 255, 0, 0.08); }
-  100%     { background: transparent; }
-}
-
-/* Corrupted text jitter */
-.glitch-takeover-text {
-  animation: glitchTextJitter 0.1s steps(3) infinite alternate;
-}
-
-@keyframes glitchTextJitter {
-  0%   { transform: translateX(0) skewX(0deg); }
-  33%  { transform: translateX(-3px) skewX(-2deg); }
-  66%  { transform: translateX(5px) skewX(3deg); }
-  100% { transform: translateX(-1px) skewX(0deg); }
-}
-
-/* Noise texture on the whole overlay */
-.glitch-takeover-noise::before {
-  content: "";
-  position: absolute;
-  inset: -50%;
-  width: 200%;
-  height: 200%;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
-  opacity: 0.15;
-  animation: glitchNoiseMove 0.2s steps(4) infinite;
-  pointer-events: none;
-}
-
-@keyframes glitchNoiseMove {
-  0%   { transform: translate(0, 0); }
-  25%  { transform: translate(-10%, 5%); }
-  50%  { transform: translate(5%, -10%); }
-  75%  { transform: translate(10%, 10%); }
-  100% { transform: translate(-5%, -5%); }
-}
-
-/* Type-in animation for each line */
-.glitch-takeover-type-in {
-  animation: glitchTypeIn 0.3s ease-out both;
-}
-
-@keyframes glitchTypeIn {
-  0%   { opacity: 0; transform: translateX(-10px); filter: blur(4px); }
-  60%  { opacity: 1; transform: translateX(2px); filter: blur(0); }
-  100% { opacity: 1; transform: translateX(0); }
-}
-
-/* Secret message reveal */
-.glitch-takeover-reveal {
-  animation: glitchReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-@keyframes glitchReveal {
-  0%   { opacity: 0; transform: scale(0.5) translateY(30px); filter: blur(20px) brightness(3); }
-  40%  { opacity: 1; filter: blur(0) brightness(1.5); }
-  60%  { transform: scale(1.05) translateY(-5px); }
-  100% { transform: scale(1) translateY(0); filter: blur(0) brightness(1); }
-}
-
-/* Secret text gradient glow */
-.glitch-takeover-secret-text {
-  background: linear-gradient(90deg, #00ff88, #00ffcc, #88ff00, #00ff88);
-  background-size: 300% 100%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: glitchSecretGlow 2s ease-in-out infinite;
-  text-shadow: none;
-}
-
-@keyframes glitchSecretGlow {
-  0%, 100% { background-position: 0% 50%; }
-  50%      { background-position: 100% 50%; }
 }

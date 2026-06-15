@@ -29,9 +29,9 @@ const ASCII_NAME = `
 ██   ██║██║   ██║██║     ██╔══╝  ╚════██║
 ╚█████╔╝╚██████╔╝███████╗███████╗███████║
  ╚════╝  ╚═════╝ ╚══════╝╚══════╝╚══════╝
- ╔═══╗╦ ╦╔═══╗╦ ╦
- ╔═══╝╠═╣║   ║║ ║
- ╚═══╝╩ ╩╚═══╝╚═╝  Développeur Full-Stack`;
+╔═══╗╦ ╦╔═══╗╦ ╦
+╚═══╝╠═╣║   ║║ ║
+╚═══╝╩ ╩╚═══╝╚═╝  Développeur Full-Stack`;
 
 /* ── Welcome message (shown on load) ─────────────────── */
 export function getWelcomeMessage(): React.ReactNode {
@@ -501,39 +501,39 @@ function openCmd(projectId?: string, portfolioData?: PortfolioData): CommandResu
 function contactCmd(portfolioData: PortfolioData): CommandResult {
   const { contact } = portfolioData;
   const rows: [string, string, string][] = [
-    ["📧  Email", contact.email, `mailto:${contact.email}`],
-    ["🐙  GitHub", contact.github, contact.github.startsWith("http") ? contact.github : `https://${contact.github}`],
+    ["Email", contact.email, `mailto:${contact.email}`],
+    ["GitHub", contact.github, contact.github.startsWith("http") ? contact.github : `https://${contact.github}`],
     ...(contact.linkedin
-      ? [["💼  LinkedIn", contact.linkedin, `https://${contact.linkedin}`] as [string, string, string]]
+      ? [["LinkedIn", contact.linkedin, `https://${contact.linkedin}`] as [string, string, string]]
       : []),
     ...(contact.twitter
-      ? [["🐦  Twitter", contact.twitter, `https://twitter.com/${contact.twitter.replace("@", "")}`] as [string, string, string]]
+      ? [["X", contact.twitter, `https://twitter.com/${contact.twitter.replace("@", "")}`] as [string, string, string]]
       : []),
   ];
 
   return {
     output: (
       <div className="animate-fade-in space-y-3">
-        <p className="text-[var(--accent)] font-bold text-lg">Contact</p>
-        <div className="space-y-2 border border-[var(--border)] rounded-lg p-4 max-w-md">
+        <p className="text-[var(--prompt)] font-bold text-lg">Contact</p>
+        <div className="space-y-1 max-w-md">
           {rows.map(([label, value, href]) => (
             <div key={label} className="flex items-center gap-3">
-              <span className="text-[var(--text)] opacity-50 w-28 shrink-0 text-sm">
+              <span className="text-[var(--text-dim)] w-20 shrink-0 text-sm uppercase tracking-wider">
                 {label}
               </span>
               <a
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[var(--prompt)] hover:underline text-sm"
+                className="text-[var(--text)] hover:text-[var(--prompt)] transition-colors text-sm"
               >
                 {value}
               </a>
             </div>
           ))}
         </div>
-        <p className="text-[var(--text)] opacity-50 text-sm">
-          Feel free to reach out — always open to interesting opportunities!
+        <p className="text-[var(--text-dim)] text-sm">
+          toujours ouvert aux opportunites interessantes.
         </p>
       </div>
     ),
@@ -578,17 +578,17 @@ function experienceCmd(portfolioData: PortfolioData): CommandResult {
 }
 
 function themeCmd(theme?: string): CommandResult {
-  const valid = ["dark", "light", "matrix", "dracula", "nord", "retro", "cyberpunk", "solarized"];
+  const valid = ["dark", "light", "terminal"];
   if (!theme || !valid.includes(theme)) {
     return {
       output: (
         <div className="animate-fade-in space-y-2">
-          <p className="text-[var(--warning)]">
+          <p className="text-[var(--text-dim)] uppercase tracking-wider text-sm">
             Usage: theme &lt;name&gt;
           </p>
           <div className="flex flex-wrap gap-2">
             {valid.map((t) => (
-              <span key={t} className="text-xs px-2 py-1 rounded border border-[var(--border)] text-[var(--accent)]">
+              <span key={t} className="text-xs px-2 py-1 border border-[var(--border)] text-[var(--text)]">
                 {t}
               </span>
             ))}
@@ -599,7 +599,7 @@ function themeCmd(theme?: string): CommandResult {
   }
   return {
     output: (
-      <p className="text-[var(--success)]">Theme switched to {theme} ✨</p>
+      <p className="text-[var(--text)]">Theme switched to {theme}</p>
     ),
     newTheme: theme,
   };
@@ -738,25 +738,23 @@ function sudoCmd(args: string): CommandResult {
     return {
       output: (
         <div className="animate-fade-in space-y-3">
-          <pre className="text-[var(--success)] text-xs sm:text-sm leading-tight whitespace-pre">{`
-╔══════════════════════════════════════════════════╗
-║                                                  ║
-║   🎉  ACCESS GRANTED                            ║
-║                                                  ║
-║   You've unlocked the secret command!            ║
-║                                                  ║
-║   I'm actively looking for new opportunities!    ║
-║   Let's connect:                                 ║
-║                                                  ║
-║   📧  juleszhou01@gmail.com                      ║
-║   🐙  github.com/iruzen-dono                    ║
-║                                                  ║
-║   Available for:                                 ║
-║     ✅  Full-time positions                      ║
-║     ✅  Freelance projects                       ║
-║     ✅  Open source collaboration                ║
-║                                                  ║
-╚══════════════════════════════════════════════════╝`}</pre>
+          <pre className="text-[var(--prompt)] text-xs sm:text-sm leading-tight whitespace-pre">{`
+╔════════════════════════════════════════════╗
+║                                            ║
+║   ACCESS GRANTED                           ║
+║                                            ║
+║   I am actively looking for                ║
+║   new opportunities!                       ║
+║                                            ║
+║   juleszhou01@gmail.com                    ║
+║   github.com/iruzen-dono                   ║
+║                                            ║
+║   Available for:                           ║
+║     Full-time positions                    ║
+║     Freelance projects                     ║
+║     Open source collaboration              ║
+║                                            ║
+╚════════════════════════════════════════════╝`}</pre>
         </div>
       ),
     };
@@ -832,18 +830,18 @@ function neofetchCmd(): CommandResult {
           </p>
           <div className="flex gap-1 mt-2">
             {[
-              "#ff6b6b",
-              "#ffd93d",
-              "#6bcb77",
-              "#4d96ff",
-              "#9b59b6",
-              "#00d4ff",
-              "#ff8c00",
-              "#e0e0e0",
+              "#ffffff",
+              "#cccccc",
+              "#999999",
+              "#666666",
+              "#333333",
+              "#222222",
+              "#111111",
+              "#000000",
             ].map((c) => (
               <div
                 key={c}
-                className="w-4 h-4 rounded-sm"
+                className="w-4 h-4 border border-[var(--border)]"
                 style={{ backgroundColor: c }}
               />
             ))}
@@ -908,7 +906,7 @@ function hackCmd(): CommandResult {
     "    employee_salaries.xlsx  [OK]",
     "    launch_codes.txt        [OK]",
     "",
-    "Just kidding 😄 — but you clearly have good hacker instincts!",
+    "Just kidding — but you clearly have good hacker instincts!",
     "Maybe type 'contact' to reach out for real?",
   ];
 
@@ -1027,8 +1025,8 @@ function slCmd(): CommandResult {
         <pre className="text-[var(--text)] text-xs whitespace-pre train-animation">
           {train}
         </pre>
-        <p className="text-[var(--warning)] text-sm mt-2 animate-fade-in" style={{ animationDelay: "4s" }}>
-          🚂 You meant &apos;ls&apos;, didn&apos;t you?
+        <p className="text-[var(--text-dim)] text-sm mt-2 animate-fade-in" style={{ animationDelay: "4s" }}>
+          You meant 'ls', didn't you?
         </p>
       </div>
     ),
@@ -1042,15 +1040,15 @@ function rmCmd(args: string[]): CommandResult {
       output: (
         <div className="animate-fade-in space-y-2">
           <p className="text-[var(--error)] font-bold">
-            🚨 SYSTEM ALERT 🚨
+            SYSTEM ALERT
           </p>
           <p className="text-[var(--error)]">
-            rm: cannot remove &apos;/&apos;: Permission denied
+            rm: cannot remove '/': Permission denied
           </p>
-          <p className="text-[var(--text)] opacity-60 text-sm mt-2">
-            Nice try! This portfolio is indestructible 💪
+          <p className="text-[var(--text-dim)] text-sm mt-2">
+            Nice try! This portfolio is indestructible.
           </p>
-          <p className="text-[var(--text)] opacity-40 text-sm">
+          <p className="text-[var(--text-dim)] text-sm">
             (No files were harmed in the making of this Easter egg)
           </p>
         </div>
@@ -1075,7 +1073,7 @@ function editorCmd(editor: string): CommandResult {
       "~",
       "~  How do I exit vim??",
       "~",
-      "~  (hint: try :q! ... or just close the tab 😅)",
+      "~  (hint: try :q! ... or just close the tab)",
       "~",
     ],
     nano: [
@@ -1102,12 +1100,11 @@ function exitCmd(): CommandResult {
   return {
     output: (
       <div className="animate-fade-in space-y-2">
-        <p className="text-[var(--warning)]">
-          logout: There is no escape from this portfolio! 😈
+        <p className="text-[var(--text-secondary)]">
+          logout: There is no escape from this portfolio!
         </p>
-        <p className="text-[var(--text)] opacity-60 text-sm">
-          But seriously, thanks for visiting. Type &apos;contact&apos; if
-          you want to connect!
+        <p className="text-[var(--text-dim)] text-sm">
+          Thanks for visiting. Type 'contact' if you want to connect.
         </p>
       </div>
     ),
@@ -1144,8 +1141,8 @@ function wgetCmd(target?: string): CommandResult {
           <p className="text-[var(--success)] text-sm mt-1">
             ████████████████████████████████████████ 100% 2.4MB/s
           </p>
-          <p className="text-[var(--text)] opacity-60 text-sm mt-2">
-            📄 &apos;resume.pdf&apos; saved (this is a simulation — add your
+          <p className="text-[var(--text-dim)] text-sm mt-2">
+            'resume.pdf' saved (this is a simulation — add your
             real resume link in data.ts!)
           </p>
         </div>
@@ -1227,7 +1224,7 @@ function soundCmd(toggle?: string): CommandResult {
   if (toggle !== "on" && toggle !== "off") {
     return {
       output: (
-        <p className="text-[var(--warning)]">
+        <p className="text-[var(--text-dim)] text-sm uppercase tracking-wider">
           Usage: sound on | sound off
         </p>
       ),
@@ -1235,8 +1232,8 @@ function soundCmd(toggle?: string): CommandResult {
   }
   return {
     output: (
-      <p className="text-[var(--success)]">
-        Sound effects {toggle === "on" ? "enabled 🔊" : "disabled 🔇"}
+      <p className="text-[var(--text)]">
+        Sound effects {toggle === "on" ? "enabled" : "disabled"}
       </p>
     ),
     soundToggle: toggle === "on",
@@ -1420,14 +1417,14 @@ function statsCmd(data: PortfolioData): CommandResult {
   return {
     output: (
       <div className="animate-fade-in space-y-2">
-        <p className="text-[var(--accent)] font-bold text-lg">
-          📊 GitHub Stats — {username || data.name}
+        <p className="text-[var(--prompt)] font-bold text-lg">
+          GitHub Stats — {username || data.name}
         </p>
         <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-sm">
           <span className="text-[var(--text)] opacity-60">Username</span>
           <span className="text-[var(--prompt)]">{username || "N/A"}</span>
           <span className="text-[var(--text)] opacity-60">Public repos</span>
-          <span className="text-[var(--success)]">{projects.length}</span>
+          <span className="text-[var(--text)]">{projects.length}</span>
           <span className="text-[var(--text)] opacity-60">Skills</span>
           <span className="text-[var(--text)]">{skills.length}</span>
           <span className="text-[var(--text)] opacity-60">Languages</span>
@@ -1440,7 +1437,7 @@ function statsCmd(data: PortfolioData): CommandResult {
               href={gh}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[var(--accent)] underline hover:opacity-80"
+              className="text-[var(--text)] underline hover:opacity-80"
             >
               {gh}
             </a>
@@ -1448,7 +1445,7 @@ function statsCmd(data: PortfolioData): CommandResult {
         )}
         {projects.length > 0 && (
           <div className="mt-2">
-            <p className="text-[var(--success)] font-bold text-sm mb-1">Repositories</p>
+            <p className="text-[var(--text)] font-bold text-sm mb-1">Repositories</p>
             {projects.map((p, i) => (
               <div key={i} className="flex gap-2 text-sm">
                 <span className="text-[var(--prompt)]">•</span>
@@ -1478,24 +1475,24 @@ function analyticsCmd(lang: Lang): CommandResult {
   return {
     output: (
       <div className="animate-fade-in space-y-2">
-        <p className="text-[var(--accent)] font-bold text-lg">
-          📈 {lang === "fr" ? "Analytique de session" : "Session Analytics"}
+        <p className="text-[var(--prompt)] font-bold text-lg">
+          {lang === "fr" ? "Analytique de session" : "Session Analytics"}
         </p>
         <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-sm">
-          <span className="text-[var(--text)] opacity-60">Sessions</span>
-          <span className="text-[var(--success)]">{data.sessions}</span>
-          <span className="text-[var(--text)] opacity-60">
-            {lang === "fr" ? "Commandes exécutées" : "Commands executed"}
+          <span className="text-[var(--text-dim)]">Sessions</span>
+          <span className="text-[var(--text)]">{data.sessions}</span>
+          <span className="text-[var(--text-dim)]">
+            {lang === "fr" ? "Commandes executees" : "Commands executed"}
           </span>
-          <span className="text-[var(--success)]">{data.totalCommands}</span>
-          <span className="text-[var(--text)] opacity-60">
+          <span className="text-[var(--text)]">{data.totalCommands}</span>
+          <span className="text-[var(--text-dim)]">
             {lang === "fr" ? "Depuis" : "Since"}
           </span>
-          <span className="text-[var(--text)]">{since}</span>
+          <span className="text-[var(--text-secondary)]">{since}</span>
         </div>
         {top.length > 0 && (
           <div className="mt-2">
-            <p className="text-[var(--success)] font-bold text-sm mb-1">
+            <p className="text-[var(--text)] font-bold text-sm mb-1">
               {lang === "fr" ? "Top commandes" : "Top commands"}
             </p>
             {top.map(([cmd, count]) => {
