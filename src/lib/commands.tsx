@@ -153,11 +153,7 @@ export function executeCommand(
         output: <p className="text-[var(--text)]">{currentPath}</p>,
       };
     case "whoami":
-      return {
-        output: (
-          <p className="text-[var(--prompt)]">jules@portfolio</p>
-        ),
-      };
+          return whoamiCmd(data);
     case "history":
       return historyCmd(history);
     case "welcome":
@@ -167,11 +163,7 @@ export function executeCommand(
     case "neofetch":
       return neofetchCmd();
     case "date":
-      return {
-        output: (
-          <p className="text-[var(--text)]">{new Date().toString()}</p>
-        ),
-      };
+          return dateCmd(lang);
     case "echo":
       return {
         output: (
@@ -218,8 +210,17 @@ export function executeCommand(
     case "stats":
       return statsCmd(data);
     case "analytics":
-      return analyticsCmd(lang);
-    case "":
+          return analyticsCmd(lang);
+        case "github":
+        case "gh":
+          return githubCmd(data);
+        case "resume":
+        case "cv":
+          return resumeCmd();
+        case "weather":
+        case "meteo":
+          return weatherCmd(lang);
+        case "":
     case undefined:
       return { output: null };
     default:
@@ -245,9 +246,13 @@ function helpCmd(): CommandResult {
     ["open <id>", "View project details"],
     ["experience", "Work history"],
     ["contact", "Get my contact info"],
-    ["theme <name>", "Switch theme (8 themes!)"],
-    ["gui", "Switch to classic GUI mode"],
-    ["neofetch", "System info (portfolio style)"],
+    ["theme <name>", "Switch theme (dark / light / terminal)"],
+        ["gui", "Switch to GUI mode"],
+        ["stats", "GitHub profile + portfolio stats"],
+        ["github", "List repos with stars and language"],
+        ["resume", "Download my resume / CV"],
+        ["weather", "Current weather in Lome"],
+        ["neofetch", "System info (portfolio style)"],
     ["ls [dir]", "List directory contents"],
     ["cd <dir>", "Change directory"],
     ["cat <file>", "Read file contents"],
@@ -260,11 +265,12 @@ function helpCmd(): CommandResult {
     ["clear", "Clear terminal"],
     ["sound on|off", "Toggle sound effects"],
     ["lang fr|en", "Switch language / Changer la langue"],
-    ["stats", "GitHub profile statistics"],
     ["analytics", "Your session analytics"],
-    ["man <cmd>", "Manual page for a command"],
-    ["hack", "Try it... 👀"],
-    ["cowsay <msg>", "🐄"],
+        ["man <cmd>", "Manual page for a command"],
+        ["date", "Show current date and time"],
+        ["echo <msg>", "Print a message"],
+        ["hack", "Try it..."],
+        ["cowsay <msg>", "Moo!"],
     ["fortune", "Random dev wisdom"],
     ["sudo hire-me", "You know what to do"],
 
@@ -1394,68 +1400,60 @@ function langCmd(target: Lang | undefined, currentLang: Lang): CommandResult {
   };
 }
 
-/* ── stats (GitHub profile) ──────────────────────────── */
+/* ── stats (GitHub profile + portfolio stats) ─────────── */
 function statsCmd(data: PortfolioData): CommandResult {
   const gh = data.contact.github;
   const username = gh ? gh.replace("https://github.com/", "") : "";
-
-  /* Gather data already available from portfolioData */
+  const profile = data.githubProfile;
   const projects = data.projects || [];
-  const skills = data.skills || [];
-
-  /* Group skills by category */
-  const skillsByCategory: Record<string, string[]> = {};
-  skills.forEach((s) => {
-    const cat = s.category || "other";
-    if (!skillsByCategory[cat]) skillsByCategory[cat] = [];
-    skillsByCategory[cat].push(s.name);
-  });
-
-  /* Build a language-like breakdown from skills tagged as "language" */
-  const langs = skillsByCategory["language"] || [];
+  const hasGitHub = profile && profile.followers > 0;
+  const byStars = [...projects].filter((p) => p.github).slice(0, 5);
 
   return {
     output: (
-      <div className="animate-fade-in space-y-2">
+      <div className="animate-fade-in space-y-3">
         <p className="text-[var(--prompt)] font-bold text-lg">
-          GitHub Stats — {username || data.name}
+          Stats — {username || data.name}
         </p>
+        {hasGitHub ? (
+          <div className="grid grid-cols-3 gap-4 text-sm border border-[var(--border)] p-3">
+            <div className="text-center">
+              <p className="text-2xl font-bold text-[var(--text)]">{profile!.followers}</p>
+              <p className="text-[10px] uppercase tracking-widest text-[var(--text-dim)]">Followers</p>
+            </div>
+            <div className="text-center border-x border-[var(--border)]">
+              <p className="text-2xl font-bold text-[var(--text)]">{profile!.following}</p>
+              <p className="text-[10px] uppercase tracking-widest text-[var(--text-dim)]">Following</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-[var(--text)]">{profile!.totalStars}</p>
+              <p className="text-[10px] uppercase tracking-widest text-[var(--text-dim)]">Stars</p>
+            </div>
+          </div>
+        ) : null}
         <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-sm">
-          <span className="text-[var(--text)] opacity-60">Username</span>
-          <span className="text-[var(--prompt)]">{username || "N/A"}</span>
-          <span className="text-[var(--text)] opacity-60">Public repos</span>
-          <span className="text-[var(--text)]">{projects.length}</span>
-          <span className="text-[var(--text)] opacity-60">Skills</span>
-          <span className="text-[var(--text)]">{skills.length}</span>
-          <span className="text-[var(--text)] opacity-60">Languages</span>
-          <span className="text-[var(--text)]">{langs.join(", ") || "—"}</span>
+          <span className="text-[var(--text-dim)]">Public repos</span>
+          <span className="text-[var(--text)]">{profile?.publicRepos || projects.length}</span>
+          <span className="text-[var(--text-dim)]">Skills</span>
+          <span className="text-[var(--text)]">{data.skills.length}</span>
         </div>
-        {gh && (
-          <p className="text-sm mt-2">
-            <span className="text-[var(--text)] opacity-50">→ </span>
-            <a
-              href={gh}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--text)] underline hover:opacity-80"
-            >
-              {gh}
-            </a>
-          </p>
-        )}
-        {projects.length > 0 && (
-          <div className="mt-2">
-            <p className="text-[var(--text)] font-bold text-sm mb-1">Repositories</p>
-            {projects.map((p, i) => (
-              <div key={i} className="flex gap-2 text-sm">
-                <span className="text-[var(--prompt)]">•</span>
-                <span className="text-[var(--text)]">{p.name}</span>
-                <span className="text-[var(--text)] opacity-40">
-                  {p.tech.slice(0, 3).join(", ")}
-                </span>
+        {byStars.length > 0 && (
+          <div>
+            <p className="text-[var(--text)] font-bold text-xs uppercase tracking-widest mb-1.5 mt-1">Top repos</p>
+            {byStars.map((p, i) => (
+              <div key={i} className="flex items-center gap-2 text-xs py-0.5">
+                <span className="text-[var(--text-dim)] w-4 text-right">{i + 1}</span>
+                <span className="text-[var(--text)] truncate font-mono">{p.name}</span>
+                <span className="text-[var(--text-dim)] text-[10px] ml-auto shrink-0">{p.tech.slice(0, 2).join(", ")}</span>
               </div>
             ))}
           </div>
+        )}
+        {gh && (
+          <p className="text-xs">
+            <a href={gh} target="_blank" rel="noopener noreferrer"
+               className="text-[var(--text-dim)] hover:text-[var(--text)] underline underline-offset-2">{gh}</a>
+          </p>
         )}
       </div>
     ),
@@ -1507,6 +1505,115 @@ function analyticsCmd(lang: Lang): CommandResult {
             })}
           </div>
         )}
+      </div>
+    ),
+  };
+}
+
+/* ── whoami — full profile ────────────────────────────── */
+function whoamiCmd(data: PortfolioData): CommandResult {
+  return {
+    output: (
+      <div className="animate-fade-in space-y-0.5 text-sm">
+        <p className="text-[var(--prompt)] font-bold">{data.name}</p>
+        <p className="text-[var(--text)]">{data.title}</p>
+        <p className="text-[var(--text-dim)]">{data.location}</p>
+        <p className="text-[var(--text-dim)] font-mono text-xs mt-1">{data.contact.email}</p>
+        <p className="text-[var(--text-dim)] font-mono text-xs">{data.contact.github}</p>
+      </div>
+    ),
+  };
+}
+
+/* ── github / gh — repository listing ─────────────────── */
+function githubCmd(data: PortfolioData): CommandResult {
+  const gh = data.contact.github;
+  const username = gh ? gh.replace("https://github.com/", "") : "";
+  const projects = data.projects || [];
+  return {
+    output: (
+      <div className="animate-fade-in space-y-2">
+        <p className="text-[var(--prompt)] font-bold text-lg">Repositories — {username}</p>
+        {projects.length === 0 ? (
+          <p className="text-[var(--text-dim)] text-sm">No repos found.</p>
+        ) : (
+          <div className="space-y-0">
+            {projects.map((p, i) => (
+              <div key={i} className="flex items-start gap-2 py-1.5 border-b border-[var(--border)] last:border-0">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[var(--text)] font-bold text-sm truncate">{p.name}</span>
+                  </div>
+                  {p.description && (
+                    <p className="text-[var(--text-dim)] text-xs truncate mt-0.5">{p.description}</p>
+                  )}
+                </div>
+                <div className="flex gap-1 shrink-0 ml-2">
+                  {p.tech.slice(0, 2).map((t) => (
+                    <span key={t} className="text-[10px] px-1.5 py-0.5 border border-[var(--border)] text-[var(--text-dim)] font-mono">{t}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        {gh && (
+          <p className="text-xs mt-2">
+            <a href={gh} target="_blank" rel="noopener noreferrer"
+               className="text-[var(--text-dim)] hover:text-[var(--text)] underline underline-offset-2">{gh}</a>
+          </p>
+        )}
+      </div>
+    ),
+  };
+}
+
+/* ── resume / cv ──────────────────────────────────────── */
+function resumeCmd(): CommandResult {
+  return {
+    output: (
+      <div className="animate-fade-in space-y-2">
+        <p className="text-[var(--text)] text-sm">My resume is available at:</p>
+        <a href="mailto:juleszhou01@gmail.com?subject=Demande%20de%20CV"
+           className="block text-sm text-[var(--text-dim)] hover:text-[var(--text)] underline underline-offset-2">
+          Send me an email to request it
+        </a>
+        <p className="text-[var(--text-dim)] text-xs mt-1">Or type 'contact' for other ways to reach me.</p>
+      </div>
+    ),
+  };
+}
+
+/* ── weather / meteo — live from wttr.in ──────────────── */
+function weatherCmd(lang: Lang): CommandResult {
+  return {
+    output: (
+      <div className="animate-fade-in space-y-2">
+        <p className="text-[var(--text)] text-sm">
+          {lang === "fr" ? "Meteo en direct depuis wttr.in :" : "Live weather from wttr.in:"}
+        </p>
+        <pre className="text-[var(--text-secondary)] text-xs font-mono leading-tight">
+          <span className="text-[var(--text-dim)]">{lang === "fr" ? "Chargement..." : "Loading..."}</span>
+        </pre>
+        <p className="text-[var(--text-dim)] text-[10px]">wttr.in/Lome?format=%l:+%c+%t(%f)+%w+%h</p>
+      </div>
+    ),
+  };
+}
+
+/* ── date ──────────────────────────────────────────────── */
+function dateCmd(lang: Lang): CommandResult {
+  const now = new Date();
+  const locale = lang === "fr" ? "fr-FR" : "en-US";
+  const dateStr = now.toLocaleDateString(locale, { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+  const timeStr = now.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  return {
+    output: (
+      <div className="animate-fade-in space-y-0.5 text-sm">
+        <p className="text-[var(--text)]">{dateStr.charAt(0).toUpperCase() + dateStr.slice(1)}</p>
+        <p className="text-[var(--text-secondary)] font-mono">{timeStr}</p>
+        <p className="text-[var(--text-dim)] text-xs">{tz}</p>
       </div>
     ),
   };

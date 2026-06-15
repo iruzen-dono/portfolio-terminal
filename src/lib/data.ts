@@ -144,6 +144,15 @@ export const portfolioData = {
     linkedin: "",
     twitter: "",
   },
+
+  githubProfile: {
+    followers: 0,
+    following: 0,
+    publicRepos: 0,
+    totalStars: 0,
+    avatarUrl: "",
+    updatedAt: "",
+  },
 };
 
 export type PortfolioData = typeof portfolioData;

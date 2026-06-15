@@ -34,9 +34,22 @@ export function mergeGitHubData(gh: GitHubData): PortfolioData {
     if (gh.profile.location) base.location = gh.profile.location;
     if (gh.profile.email) base.email = gh.profile.email;
     base.github = gh.profile.html_url;
-    // contact.github is used with `https://` prefix in templates, so strip protocol
     base.contact.github = gh.profile.html_url.replace(/^https?:\/\//, "");
     if (gh.profile.email) base.contact.email = gh.profile.email;
+
+    // Populate real GitHub stats
+    const totalStars = gh.repos.reduce(
+      (sum, r) => sum + (r.stargazers_count || 0),
+      0
+    );
+    base.githubProfile = {
+      followers: gh.profile.followers,
+      following: gh.profile.following,
+      publicRepos: gh.profile.public_repos,
+      totalStars,
+      avatarUrl: gh.profile.avatar_url,
+      updatedAt: new Date().toISOString(),
+    };
   }
 
   // Build a set of repo names already manually defined in data.ts
