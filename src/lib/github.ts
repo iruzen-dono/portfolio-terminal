@@ -45,20 +45,24 @@ export interface GitHubData {
 const headers: HeadersInit = {
   Accept: "application/vnd.github.v3+json",
   "User-Agent": "portfolio-terminal",
-  ...(process.env.GITHUB_TOKEN
-    ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
-    : {}),
 };
 
 export async function fetchGitHubData(): Promise<GitHubData> {
   try {
+    const authHeaders: HeadersInit = {
+      ...headers,
+      ...(process.env.GITHUB_TOKEN
+        ? { Authorization: "Bearer " + process.env.GITHUB_TOKEN }
+        : {}),
+    };
+
     const [profileRes, reposRes] = await Promise.all([
       fetch(`${API}/users/${GITHUB_USERNAME}`, {
-        headers,
-        next: { revalidate: 3600 }, // ISR: 1 hour
+        headers: authHeaders,
+        next: { revalidate: 3600 },
       }),
       fetch(`${API}/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`, {
-        headers,
+        headers: authHeaders,
         next: { revalidate: 3600 },
       }),
     ]);
@@ -69,7 +73,6 @@ export async function fetchGitHubData(): Promise<GitHubData> {
 
     const allRepos: GitHubRepo[] = reposRes.ok ? await reposRes.json() : [];
 
-    // Filter out forks, sort by most recently pushed
     const repos = allRepos
       .filter((r) => !r.fork)
       .sort(

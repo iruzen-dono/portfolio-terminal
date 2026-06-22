@@ -15,12 +15,16 @@ export const portfolioData = {
     "la sécurité et l'experience utilisateur.",
     "",
     "Toujours en train d'apprendre, toujours en train de construire.",
-    "J'opere et gere un agent IA personnel (Hermes) deploye sur Telegram, Discord, CLI et desktop --",
-    "de l'installation a la configuration des outils, skills et taches planifiees.",
+    "J'opere et gere un agent IA personnel (Hermes) deploye sur Telegram,",
+    "Discord, CLI et desktop -- de l'installation a la configuration",
+    "des outils, skills et taches planifiees.",
+    "J'ai publie deux outils open-source pour la communaute Hermes :",
+    "un scanner de codebase et un generateur de plugins.",
   ],
 
   skills: [
     { name: "TypeScript", level: 88, category: "language" },
+    { name: "Python", level: 85, category: "language" },
     { name: "React / Next.js", level: 85, category: "frontend" },
     { name: "PHP", level: 82, category: "language" },
     { name: "Java", level: 80, category: "language" },
@@ -38,7 +42,7 @@ export const portfolioData = {
     { name: "Git / GitHub", level: 80, category: "tools" },
     { name: "Docker", level: 72, category: "devops" },
     { name: "Ktor", level: 70, category: "backend" },
-    { name: "AI Agents", level: 85, category: "tools" },
+    { name: "AI Agents", level: 87, category: "tools" },
   ],
 
   projects: [
@@ -119,6 +123,28 @@ export const portfolioData = {
       image: "https://opengraph.githubassets.com/1/iruzen-dono/RestaurantApp",
       year: 2026,
     },
+    {
+      id: "hermes-project-oracle",
+      name: "Hermes Project Oracle",
+      description:
+        "Scanner de codebase pour Hermes Agent : analyse 28 langages, detecte frameworks, conventions, points d'entree et schemas. Genere AGENTS.md, CLAUDE.md et notes Obsidian. Zero dependances.",
+      tech: ["Python", "Hermes Agent", "Tree-sitter", "Pathlib", "JSON Schema"],
+      github: "https://github.com/iruzen-dono/hermes-project-oracle",
+      live: "",
+      image: "https://opengraph.githubassets.com/1/iruzen-dono/hermes-project-oracle",
+      year: 2026,
+    },
+    {
+      id: "hermes-plugin-gen",
+      name: "Hermes Plugin Generator",
+      description:
+        "Scaffolder de plugins Hermes : decris ton plugin en langage naturel, il genere plugin.yaml, __init__.py, schemas.py, tools.py et une skill embarquee. Qualite production avec check_fn, emoji, kind standalone.",
+      tech: ["Python", "Hermes Agent", "Plugin System", "Code Generation", "YAML"],
+      github: "https://github.com/iruzen-dono/hermes-plugin-gen",
+      live: "",
+      image: "https://opengraph.githubassets.com/1/iruzen-dono/hermes-plugin-gen",
+      year: 2026,
+    },
   ],
 
   experience: [
@@ -127,7 +153,7 @@ export const portfolioData = {
       company: "Projets personnels",
       period: "2025 — Present",
       description:
-        "Developpement de KeycePass (KMP), XEARN (micro-revenus), Hermes Bot (agent IA multi-plateforme). Administration d'un systeme agentique complet : deploiement, outils, skills, taches planifiees et monitoring.",
+        "Developpement de KeycePass (KMP), XEARN (micro-revenus), Hermes Bot (agent IA multi-plateforme). Administration d'un systeme agentique complet : deploiement, outils, skills, taches planifiees et monitoring. Publication de deux outils open-source pour la communaute Hermes (Project Oracle + Plugin Generator).",
     },
     {
       role: "Developpeur Web PHP",
