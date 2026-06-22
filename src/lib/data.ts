@@ -149,25 +149,32 @@ export const portfolioData = {
 
   experience: [
     {
-      role: "Developpeur Full-Stack Independant",
+      role: "Developpeur Full-Stack & Agent IA",
       company: "Projets personnels",
-      period: "2025 — Present",
+      period: "2024 — Present",
       description:
-        "Developpement de KeycePass (KMP), XEARN (micro-revenus), Hermes Bot (agent IA multi-plateforme). Administration d'un systeme agentique complet : deploiement, outils, skills, taches planifiees et monitoring. Publication de deux outils open-source pour la communaute Hermes (Project Oracle + Plugin Generator).",
+        "Conception et developpement d'applications multi-plateforme : KeycePass (Kotlin KMP, Compose Multiplatform, Ktor), XEARN (Next.js 15, NestJS, TypeScript) et Portfolio Terminal (Next.js 14, monochrome brutalist). Operation d'un agent IA Hermes complet : deploiement Telegram/Discord/CLI/desktop, configuration d'outils et skills, taches CRON, memoire persistante, plugins. Publication de deux outils open-source pour la communaute Hermes (Project Oracle + Plugin Generator) sur GitHub.",
+    },
+    {
+      role: "Developpeur Spring Boot & API REST",
+      company: "Java-SprinBoot",
+      period: "2025",
+      description:
+        "Conception d'une API RESTful avec Spring Boot 3, Spring Security, JWT, JPA/Hibernate et PostgreSQL. Architecture en couches, validation, documentation OpenAPI et bonnes pratiques du framework.",
     },
     {
       role: "Developpeur Web PHP",
       company: "NovaShop Pro",
       period: "Janvier — Fevrier 2026",
       description:
-        "Developpement complet d'une plateforme e-commerce PHP/MySQL avec panel admin, gestion de variantes produits, systeme de commandes et securite multi-couche.",
+        "Developpement complet d'une plateforme e-commerce PHP/MySQL avec architecture MVC, catalogue produits avec variantes, systeme de commandes, panel admin, securite multi-couche (XSS, CSRF, SQL injection) et export de donnees.",
     },
     {
-      role: "Etudiant — Travaux Pratiques",
+      role: "Projet Académique — Java Desktop",
       company: "Universite",
       period: "Fevrier 2026",
       description:
-        "Projet universitaire RestaurantApp : application bureau Java SE avec Java Swing, MySQL, architecture MVC/DAO, gestion de stocks et commandes.",
+        "Application de bureau Java SE (Swing) pour la gestion de restaurant : stocks, commandes, statistiques, export CSV et historique d'audit. Architecture MVC avec pattern DAO et base MySQL.",
     },
   ],
 
