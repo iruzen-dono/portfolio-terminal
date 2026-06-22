@@ -149,32 +149,25 @@ export const portfolioData = {
 
   experience: [
     {
-      role: "Developpeur Full-Stack & Agent IA",
-      company: "Projets personnels",
+      role: "Etudiant B2 IT",
+      company: "Ascencia Keyce Togo (AK Togo)",
       period: "2024 — Present",
       description:
-        "Conception et developpement d'applications multi-plateforme : KeycePass (Kotlin KMP, Compose Multiplatform, Ktor), XEARN (Next.js 15, NestJS, TypeScript) et Portfolio Terminal (Next.js 14, monochrome brutalist). Operation d'un agent IA Hermes complet : deploiement Telegram/Discord/CLI/desktop, configuration d'outils et skills, taches CRON, memoire persistante, plugins. Publication de deux outils open-source pour la communaute Hermes (Project Oracle + Plugin Generator) sur GitHub.",
+        "Formation Bac+2 en Informatique (IT-B2 A). Analyse fonctionnelle, genie logiciel, POO Java, bases de donnees. Projets academiques : CDPS (cahier des charges d'une plateforme de suivi d'insertion professionnelle des diplomes) et KeycePass (application KMP de controle de presence par QR code, geolocalisation et anti-fraude HMAC).",
     },
     {
-      role: "Developpeur Spring Boot & API REST",
-      company: "Java-SprinBoot",
-      period: "2025",
+      role: "Developpeur Full-Stack & Agent IA",
+      company: "Projets personnels",
+      period: "Janvier 2026 — Present",
       description:
-        "Conception d'une API RESTful avec Spring Boot 3, Spring Security, JWT, JPA/Hibernate et PostgreSQL. Architecture en couches, validation, documentation OpenAPI et bonnes pratiques du framework.",
+        "Developpement d'applications multi-stack : XEARN (Next.js 15, NestJS, TypeScript, Prisma, PostgreSQL), Portfolio Terminal (Next.js 14, monochrome brutalist), NovaShop (PHP/Laravel), Workless (Python DAG engine), API REST Spring Boot. Operation d'un agent IA Hermes : deploiement Telegram/Discord/CLI/desktop, configuration d'outils, skills, plugins, taches CRON et memoire persistante. Publication de deux outils open-source pour la communaute Hermes (Project Oracle + Plugin Generator).",
     },
     {
-      role: "Developpeur Web PHP",
-      company: "NovaShop Pro",
-      period: "Janvier — Fevrier 2026",
-      description:
-        "Developpement complet d'une plateforme e-commerce PHP/MySQL avec architecture MVC, catalogue produits avec variantes, systeme de commandes, panel admin, securite multi-couche (XSS, CSRF, SQL injection) et export de donnees.",
-    },
-    {
-      role: "Projet Académique — Java Desktop",
-      company: "Universite",
+      role: "Developpeur Java — Projet Academique",
+      company: "Universite — Travaux Pratiques",
       period: "Fevrier 2026",
       description:
-        "Application de bureau Java SE (Swing) pour la gestion de restaurant : stocks, commandes, statistiques, export CSV et historique d'audit. Architecture MVC avec pattern DAO et base MySQL.",
+        "Application de bureau Java SE (Swing) pour la gestion de restaurant : stocks, commandes, statistiques, export CSV et historique d'audit. Architecture MVC avec pattern DAO et base de donnees MySQL.",
     },
   ],
 
