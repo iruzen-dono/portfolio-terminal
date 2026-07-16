@@ -171,15 +171,59 @@ export const portfolioData = {
       image: "https://opengraph.githubassets.com/1/iruzen-dono/RestaurantApp",
       year: 2026,
     },
+    {
+      id: "landlord-kit",
+      name: "LandLordKit",
+      description:
+        "SaaS de gestion locative : suivi des biens, locataires, loyers et charges. Dashboard analytics avec graphiques, auth sécurisée, notifications email via Resend. Stack Next.js + Drizzle + Neon.",
+      tech: ["Next.js 16", "React 19", "Drizzle ORM", "Neon", "NextAuth", "Stripe", "Resend", "TailwindCSS"],
+      github: "https://github.com/iruzen-dono/landlord-kit",
+      live: "",
+      image: "https://opengraph.githubassets.com/1/iruzen-dono/landlord-kit",
+      year: 2026,
+    },
+    {
+      id: "quotask",
+      name: "Quotask",
+      description:
+        "SaaS de devis freelance avec création PDF, signature électronique, paiements Stripe/Lemon Squeezy et relances email automatisées. Architecture Next.js 16 App Router avec Base UI et Drizzle.",
+      tech: ["Next.js 16", "React 19", "Drizzle ORM", "Neon", "NextAuth", "Stripe", "Lemon Squeezy", "React PDF", "Resend"],
+      github: "https://github.com/iruzen-dono/quotask",
+      live: "",
+      image: "https://opengraph.githubassets.com/1/iruzen-dono/quotask",
+      year: 2026,
+    },
+    {
+      id: "trade-quote",
+      name: "TradeQuote",
+      description:
+        "Outil de cotation et d'analyse trading : backtesting de stratégies, signaux smart-money, données Hyperliquid et Binance en temps réel. Interface Next.js avec base de données Neon.",
+      tech: ["Next.js 16", "React 19", "Drizzle ORM", "Neon", "TailwindCSS", "Hyperliquid API", "Binance API"],
+      github: "https://github.com/iruzen-dono/trade-quote",
+      live: "",
+      image: "https://opengraph.githubassets.com/1/iruzen-dono/trade-quote",
+      year: 2026,
+    },
+    {
+      id: "roue-fortune",
+      name: "Roue de la Fortune",
+      description:
+        "Application web multi-joueur pour soirées musicales interactives : scan QR code, roue de la fortune Spotify, mode Quiz (deviner titre/extrait), mode Jukebox. Stack Next.js + Socket.IO + Spotify API.",
+      tech: ["Next.js", "React", "Socket.IO", "Spotify API", "TypeScript", "TailwindCSS"],
+      github: "https://github.com/iruzen-dono/roue-fortune",
+      live: "",
+      image: "https://opengraph.githubassets.com/1/iruzen-dono/roue-fortune",
+      year: 2026,
+    },
   ],
 
   experience: [
     {
-      role: "Développeur Full-Stack & Agent IA",
-      company: "Projets personnels / Open Source",
+      role: "Développeur Full-Stack & SaaS Builder",
+      company: "Freelance / Open Source",
       period: "Janvier 2026 — Présent",
       description:
-        "Développement d'applications multi-stack : Workless (moteur workflow Laravel + Next.js + React Flow), XEARN (Next.js + NestJS), Memory Vault (plugin Hermes), Portfolio Terminal (Next.js brutalist). Opération d'un agent IA Hermes : déploiement Telegram/Discord/CLI/TUI, configuration d'outils, skills, plugins, tâches CRON et mémoire persistante. Publication de trois outils open-source pour la communauté Hermes : Project Oracle (scanneur codebase), Plugin Generator (scaffolder NLP), Memory Vault (format pack portable).",
+        "Conception et développement de SaaS multi-stack : Workless (moteur workflow open-source Laravel + Next.js), LandLordKit (gestion locative avec Drizzle + Neon + Stripe), Quotask (plateforme de devis avec signature PDF et Lemon Squeezy), TradeQuote (outil de cotation trading). Opération d'un agent IA Hermes personnel déployé sur Telegram, Discord, CLI, TUI et desktop avec configuration outils, skills, plugins, mémoire persistante et tâches CRON. Publication de trois outils open-source pour la communauté Hermes : Project Oracle (scanneur codebase 28 langages), Plugin Generator (scaffolder NLP), Memory Vault (format pack portable v1.1.0).",
     },
     {
       role: "Étudiant B2 IT",
@@ -207,10 +251,10 @@ export const portfolioData = {
   githubProfile: {
     followers: 6,
     following: 4,
-    publicRepos: 12,
-    totalStars: 3,
+    publicRepos: 16,
+    totalStars: 5,
     avatarUrl: "https://avatars.githubusercontent.com/u/187991500?v=4",
-    updatedAt: "2026-07-09",
+    updatedAt: "2026-07-16",
   },
 };
 
