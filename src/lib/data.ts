@@ -18,9 +18,11 @@ export const portfolioData = {
     "J'opère et gère un agent IA personnel (Hermes) déployé sur Telegram,",
     "Discord, CLI et desktop — de l'installation à la configuration",
     "des outils, skills et tâches planifiées.",
-    "J'ai publié trois outils open-source pour la communauté Hermes :",
+    "J'ai publié quatre outils open-source pour la communauté Hermes :",
     "un générateur de plugins, un scanneur de codebase,",
-    "et un protocol de packs de contexte portable.",
+    "un protocole de packs de contexte portable, et un oracle de projet.",
+    "Mon plus gros projet open-source est XEARN, une plateforme",
+    "fintech panafricaine de micro-revenus digitaux (NestJS + Next.js + Expo).",
   ],
 
   skills: [
@@ -36,6 +38,7 @@ export const portfolioData = {
     { name: "Spring Boot", level: 78, category: "backend" },
     { name: "Ktor", level: 70, category: "backend" },
     { name: "Tailwind CSS", level: 85, category: "frontend" },
+    { name: "React Native / Expo", level: 76, category: "frontend" },
     { name: "HTML / CSS", level: 80, category: "frontend" },
     { name: "Three.js / R3F", level: 72, category: "frontend" },
     { name: "MySQL", level: 80, category: "database" },
@@ -87,8 +90,8 @@ export const portfolioData = {
       id: "xearn",
       name: "XEARN",
       description:
-        "Plateforme panafricaine de micro-revenus digitaux. Tâches rémunérées, parrainage 3 niveaux, paiement Mobile Money (FedaPay), dashboard admin complet.",
-      tech: ["Next.js 15", "React 19", "TypeScript", "NestJS", "Prisma", "PostgreSQL", "TailwindCSS", "NextAuth", "Docker"],
+        "Plateforme panafricaine de micro-revenus digitaux — tâches rémunérées, parrainage 3 niveaux, paiement Mobile Money (FedaPay), gamification (16 badges, streaks), dashboard admin complet (stats, utilisateurs, logs), app mobile Expo/Reanimated premium.",
+      tech: ["Next.js 15", "React 19", "TypeScript", "NestJS", "Prisma", "PostgreSQL", "Expo", "Reanimated", "TailwindCSS", "Docker"],
       github: "https://github.com/iruzen-dono/XEARN",
       live: "",
       image: "https://opengraph.githubassets.com/1/iruzen-dono/XEARN",
@@ -249,9 +252,9 @@ export const portfolioData = {
   },
 
   githubProfile: {
-    followers: 6,
+    followers: 8,
     following: 4,
-    publicRepos: 16,
+    publicRepos: 19,
     totalStars: 5,
     avatarUrl: "https://avatars.githubusercontent.com/u/187991500?v=4",
     updatedAt: "2026-07-16",
