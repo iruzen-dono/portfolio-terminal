@@ -9,6 +9,7 @@ import { getNode, resolvePath, buildFileSystem, type FSNode } from "./fileSystem
 import { launchConfetti } from "./confetti";
 import { type Lang, t } from "./i18n";
 import { getAnalytics, getTopCommands } from "./analytics";
+import { CommandLink } from "@/components/CommandLink";
 
 /* ── Types ───────────────────────────────────────────── */
 export interface CommandResult {
@@ -19,6 +20,7 @@ export interface CommandResult {
   showGUI?: boolean;
   soundToggle?: boolean; // toggle sound on/off
   newLang?: Lang;
+  demoMode?: string[]; // queue of commands for auto-presentation
 }
 
 /* ── ASCII banner ────────────────────────────────────── */
@@ -59,6 +61,8 @@ export function getWelcomeMessage(): React.ReactNode {
 
 /* ── Autocomplete list ───────────────────────────────── */
 export const AVAILABLE_COMMANDS = [
+  "demo",
+  "present",
   "help",
   "about",
   "skills",
@@ -126,6 +130,9 @@ export function executeCommand(
   const command = cmd?.toLowerCase();
 
   switch (command) {
+    case "demo":
+    case "present":
+      return presentCmd();
     case "help":
       return helpCmd();
     case "about":
@@ -251,11 +258,15 @@ export function executeCommand(
         output: (
           <p className="text-[var(--error)] text-sm">
             command not found: /{cmd}. Type{" "}
-            <span className="text-[var(--success)]">/help</span> for
+            <CommandLink command="/help" variant="success">/help</CommandLink> for
             available commands.
             {fuzzy.length > 0 && fuzzy[0] !== `/${cmd}` && (
               <span className="block text-[var(--text-dim)] text-xs mt-1">
-                Did you mean <span className="text-[var(--prompt)]">{fuzzy[0]}</span>?
+                Did you mean{" "}
+                <CommandLink command={fuzzy[0]} variant="prompt">
+                  {fuzzy[0]}
+                </CommandLink>
+                ?
               </span>
             )}
           </p>
@@ -305,6 +316,8 @@ function helpCmd(): CommandResult {
     ["/cowsay <msg>", "Moo!"],
     ["/fortune", "Random dev wisdom"],
     ["/sudo hire-me", "You know what to do"],
+    ["/demo", "Auto-guided presentation tour"],
+    ["/present", "Alias for /demo"],
   ];
 
   return {
@@ -314,19 +327,63 @@ function helpCmd(): CommandResult {
           Available Commands
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1">
-          {cmds.map(([c, d]) => (
-            <div key={c} className="flex">
-              <span className="text-[var(--success)] w-36 shrink-0 font-mono text-sm">
-                {c}
-              </span>
-              <span className="text-[var(--text)] opacity-70 text-sm">
-                {d}
-              </span>
-            </div>
-          ))}
+          {cmds.map(([c, d]) => {
+            const cmdName = c.split(" ")[0]; // extract "/about" from "/about" or "/open <id>"
+            return (
+              <div key={c} className="flex items-baseline gap-2">
+                <CommandLink command={cmdName} variant="success" className="w-36 shrink-0 font-mono text-sm">
+                  {c}
+                </CommandLink>
+                <span className="text-[var(--text)] opacity-70 text-sm">
+                  {d}
+                </span>
+              </div>
+            );
+          })}
         </div>
       </div>
     ),
+  };
+}
+
+/* ── Presentation / Demo mode ─────────────────────────── */
+const DEMO_QUEUE = [
+  "about",
+  "skills",
+  "projects",
+  "open xearn",
+  "stats",
+  "contact",
+];
+
+function presentCmd(): CommandResult {
+  return {
+    output: (
+      <div className="animate-fade-in space-y-2">
+        <p className="text-[var(--accent)] font-bold text-lg">
+          🎬 Presentation Mode
+        </p>
+        <p className="text-[var(--text)] opacity-80 text-sm">
+          Watch a guided tour of this portfolio. Commands will auto-execute
+          every 1.5 seconds.
+        </p>
+        <div className="flex flex-wrap gap-2 mt-3">
+          {DEMO_QUEUE.map((cmd, i) => (
+            <span
+              key={cmd}
+              className="text-xs px-2 py-1 rounded border border-[var(--border)] text-[var(--text-dim)] font-mono"
+              style={{ animationDelay: `${i * 0.1}s` }}
+            >
+              {i + 1}. /{cmd}
+            </span>
+          ))}
+        </div>
+        <p className="text-[var(--text-dim)] text-xs mt-2">
+          Press Ctrl+L or type "clear" to stop.
+        </p>
+      </div>
+    ),
+    demoMode: DEMO_QUEUE,
   };
 }
 
@@ -435,8 +492,9 @@ function projectsCmd(portfolioData: PortfolioData): CommandResult {
                 ))}
               </div>
               <p className="text-[var(--text)] opacity-50 text-xs mt-2">
-                Type{" "}
-                <span className="text-[var(--success)]">open {p.id}</span>{" "}
+                <CommandLink command={`open ${p.id}`} variant="success">
+                  open {p.id}
+                </CommandLink>{" "}
                 for details
               </p>
             </div>
@@ -453,7 +511,7 @@ function openCmd(projectId?: string, portfolioData?: PortfolioData): CommandResu
       output: (
         <p className="text-[var(--warning)]">
           Usage: open &lt;project-id&gt; — Type{" "}
-          <span className="text-[var(--success)]">projects</span> to see
+          <CommandLink command="/projects" variant="success">/projects</CommandLink> to see
           IDs.
         </p>
       ),
@@ -465,78 +523,138 @@ function openCmd(projectId?: string, portfolioData?: PortfolioData): CommandResu
   if (!project) {
     return {
       output: (
-        <p className="text-[var(--error)]">
-          Project &ldquo;{projectId}&rdquo; not found. Type{" "}
-          <span className="text-[var(--success)]">projects</span> to see
-          available projects.
-        </p>
-      ),
+          <p className="text-[var(--error)]">
+            Project &ldquo;{projectId}&rdquo; not found. Type{" "}
+            <CommandLink command="/projects" variant="success">/projects</CommandLink> to see
+            available projects.
+          </p>
+        ),
     };
   }
 
+  /* ── Project type badge ── */
+  const typeBadge = (() => {
+    if (project.id === "xearn") return { label: "Mobile + Web", color: "text-[var(--accent)]" };
+    if (project.tech.some(t => t.includes("React Native") || t.includes("Expo"))) return { label: "Mobile", color: "text-[var(--success)]" };
+    if (project.tech.some(t => t.includes("Next") || t.includes("React"))) return { label: "Web App", color: "text-[var(--prompt)]" };
+    if (project.tech.some(t => t.includes("Java") || t.includes("Kotlin") || t.includes("KMP"))) return { label: "Desktop", color: "text-[var(--text-dim)]" };
+    return null;
+  })();
+
   return {
     output: (
-      <div className="animate-fade-in border border-[var(--border)] rounded-lg p-5 max-w-2xl">
-        {project.image && (
-          <div className="mb-4 border border-[var(--border)] overflow-hidden rounded bg-[var(--surface)]">
-            <img
-              src={project.image}
-              alt={project.name}
-              className="w-full h-auto object-cover block"
-              loading="lazy"
-              onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
-            />
+      <div className="animate-fade-in max-w-2xl">
+        {/* Main card with subtle glow */}
+        <div className="relative group">
+          {/* Glow border effect */}
+          <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-b from-[var(--prompt)]/10 via-transparent to-[var(--accent)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-[1px]" />
+          
+          <div className="relative border border-[var(--border)] rounded-xl bg-[var(--surface)] overflow-hidden hover:border-[var(--prompt)]/30 transition-colors duration-300">
+            
+            {/* Image header */}
+            {project.image && (
+              <div className="border-b border-[var(--border)] overflow-hidden bg-[var(--terminal-bg)] max-h-56">
+                <img
+                  src={project.image}
+                  alt={project.name}
+                  className="w-full h-44 sm:h-52 object-cover block opacity-90 hover:opacity-100 transition-opacity duration-300"
+                  loading="lazy"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                />
+              </div>
+            )}
+
+            {/* Content */}
+            <div className="p-5 sm:p-6">
+              {/* Header: name + year + badge */}
+              <div className="flex items-start justify-between gap-3 mb-4">
+                <div className="flex items-center gap-3 flex-wrap">
+                  <span className="text-[var(--prompt)] font-bold text-xl glow-text-subtle">
+                    {project.name}
+                  </span>
+                  {typeBadge && (
+                    <span className={`text-[10px] uppercase tracking-widest ${typeBadge.color} border border-current/30 px-2 py-0.5 rounded-full font-semibold`}>
+                      {typeBadge.label}
+                    </span>
+                  )}
+                </div>
+                <span className="text-[var(--text-dim)] text-xs font-mono shrink-0 mt-1">
+                  {project.year}
+                </span>
+              </div>
+
+              {/* Description */}
+              <p className="text-[var(--text)] opacity-85 text-sm leading-relaxed mb-5">
+                {project.description}
+              </p>
+
+              {/* Tech Stack — beautiful badges */}
+              <div className="mb-5">
+                <p className="text-[var(--text-dim)] text-[10px] uppercase tracking-widest mb-2 font-semibold">
+                  Stack
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {project.tech.map((t) => {
+                    /* Colour-code tech badges */
+                    const isRuntime = ["Next.js", "React", "Laravel", "Spring Boot", "NestJS", "Ktor"].includes(t);
+                    const isLang = ["TypeScript", "JavaScript", "Python", "PHP", "Java", "Kotlin", "CSS", "HTML"].includes(t);
+                    const isDB = ["PostgreSQL", "MySQL", "SQLite", "Neon"].includes(t);
+                    const isTool = ["Docker", "Git", "Redis", "TailwindCSS"].includes(t);
+                    const color = isRuntime ? "var(--prompt)" : isLang ? "var(--accent)" : isDB ? "var(--success)" : isTool ? "var(--text-dim)" : "var(--text-secondary)";
+                    
+                    return (
+                      <span
+                        key={t}
+                        className="text-[11px] px-2.5 py-1 rounded-md font-mono border"
+                        style={{
+                          borderColor: color,
+                          color: color,
+                          background: `${color}08`,
+                        }}
+                      >
+                        {t}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Links */}
+              <div className="flex flex-wrap gap-3 pt-4 border-t border-[var(--border)]">
+                {project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md border border-[var(--border)] text-[var(--text)] hover:text-[var(--prompt)] hover:border-[var(--prompt)] transition-all duration-200"
+                  >
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.73.083-.73 1.205.085 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12 24 5.37 18.63 0 12 0z"/>
+                    </svg>
+                    Source
+                  </a>
+                )}
+                {project.live && project.live !== project.github && (
+                  <a
+                    href={project.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--terminal-bg)] transition-all duration-200"
+                  >
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                      <polyline points="15 3 21 3 21 9"/>
+                      <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                    Live Demo
+                  </a>
+                )}
+                <CommandLink command="/projects" variant="dim" className="text-xs ml-auto self-center">
+                  ← All projects
+                </CommandLink>
+              </div>
+            </div>
           </div>
-        )}
-        <div className="flex items-center gap-3 mb-3">
-          <span className="text-[var(--prompt)] font-bold text-lg">
-            {project.name}
-          </span>
-          <p className="text-[var(--text)] opacity-40 text-sm">
-            {project.year}
-          </p>
-        </div>
-        <p className="text-[var(--text)] opacity-80 mb-4">
-          {project.description}
-        </p>
-        <div className="space-y-2">
-          <p className="text-[var(--accent)] font-bold text-sm">
-            Tech Stack
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {project.tech.map((t) => (
-              <span
-                key={t}
-                className="text-xs px-3 py-1 rounded border border-[var(--accent)] text-[var(--accent)]"
-              >
-                {t}
-              </span>
-            ))}
-          </div>
-        </div>
-        <div className="mt-4 pt-3 border-t border-[var(--border)] space-y-1">
-          <p className="text-sm">
-            <span className="text-[var(--text)] opacity-50">GitHub: </span>
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--prompt)] hover:underline"
-            >
-              {project.github}
-            </a>
-          </p>
-          <p className="text-sm">
-            <span className="text-[var(--text)] opacity-50">Live: </span>
-            <a
-              href={project.live}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--success)] hover:underline"
-            >
-              {project.live}
-            </a>
-          </p>
         </div>
       </div>
     ),

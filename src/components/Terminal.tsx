@@ -46,6 +46,7 @@ interface TerminalProps {
   onGUISwitch: () => void;
   lang: Lang;
   onLangChange: (lang: Lang) => void;
+  onReady?: (execute: (cmd: string) => void) => void;
 }
 
 /* ── Component ───────────────────────────────────────── */
@@ -54,6 +55,7 @@ export default function Terminal({
   onGUISwitch,
   lang,
   onLangChange,
+  onReady,
 }: TerminalProps) {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -70,6 +72,10 @@ export default function Terminal({
   const [isMobile, setIsMobile] = useState(false);
   const [viewportH, setViewportH] = useState("100dvh");
 
+  const maxCounterRef = useRef(0);
+  const demoRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const demoQueueRef = useRef<string[]>([]);
+
   /* detect mobile & handle visual viewport changes (keyboard open/close) */
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 640);
@@ -81,7 +87,6 @@ export default function Terminal({
     const onViewportResize = () => {
       if (vv) {
         setViewportH(`${vv.height}px`);
-        // scroll to bottom when keyboard opens
         setTimeout(() => {
           scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
         }, 50);
@@ -113,14 +118,92 @@ export default function Terminal({
   useEffect(() => {
     inputRef.current?.focus();
     trackSession();
+    return () => {
+      if (demoRef.current) clearTimeout(demoRef.current);
+    };
+  }, []);
+
+  /* Expose execute function to parent (clickable commands) */
+  useEffect(() => {
+    if (onReady) {
+      onReady(runCommand);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const focusInput = useCallback((e: React.MouseEvent) => {
-    // Don't steal focus from link clicks
     const target = e.target as HTMLElement;
     if (target.closest("a")) return;
+    if (target.closest("[role='button']")) return; // don't steal from CommandLink
     inputRef.current?.focus();
   }, []);
+
+  /* ── Core execution logic, extracted so it can be called
+         both from the input handler and from external clickable commands ── */
+  const runCommand = useCallback(
+    (trimmed: string) => {
+      if (trimmed) trackCommand(trimmed);
+      const result = executeCommand(trimmed, currentPath, commandHistory, portfolioData, lang);
+
+      /* sound toggle */
+      if (result.soundToggle !== undefined) setSoundOn(result.soundToggle);
+
+      /* lang switch */
+      if (result.newLang) onLangChange(result.newLang as Lang);
+
+      playExec();
+
+      /* clear */
+      if (result.clear) {
+        if (demoRef.current) clearTimeout(demoRef.current);
+        demoQueueRef.current = [];
+        setHistory([]);
+        setShowWelcome(false);
+        setInput("");
+        return;
+      }
+
+      /* theme switch */
+      if (result.newTheme) onThemeChange(result.newTheme);
+
+      /* GUI switch */
+      if (result.showGUI) {
+        onGUISwitch();
+        return;
+      }
+
+      /* cd */
+      if (result.newPath) setCurrentPath(result.newPath);
+
+      /* append to visible history */
+      const id = maxCounterRef.current++;
+      const entry: HistoryEntry = {
+        id,
+        command: trimmed,
+        path: currentPath,
+        output: result.output,
+      };
+      setHistory((h) => [...h, entry]);
+
+      if (trimmed) setCommandHistory((h) => [...h, trimmed]);
+      setHistoryIndex(-1);
+      setInput("");
+
+      /* ── Demo mode: process queue ── */
+      if (result.demoMode && result.demoMode.length > 0) {
+        demoQueueRef.current = [...result.demoMode];
+        const processNext = () => {
+          if (demoQueueRef.current.length === 0) return;
+          const next = demoQueueRef.current.shift()!;
+          demoRef.current = setTimeout(() => {
+            runCommand(next);
+          }, 1500);
+        };
+        processNext();
+      }
+    },
+    [currentPath, commandHistory, onThemeChange, onGUISwitch, playExec, setSoundOn, portfolioData, lang, onLangChange]
+  );
 
   /* ── Mobile: navigate history ────────────────────── */
   const historyUp = useCallback(() => {
@@ -152,84 +235,16 @@ export default function Terminal({
     (cmd: string) => {
       setInput(cmd);
       trackCommand(cmd);
-      // Execute directly
-      const result = executeCommand(cmd, currentPath, commandHistory, portfolioData, lang);
-      if (result.soundToggle !== undefined) setSoundOn(result.soundToggle);
-      if (result.newLang) onLangChange(result.newLang as Lang);
-      playExec();
-      if (result.clear) {
-        setHistory([]);
-        setShowWelcome(false);
-        setInput("");
-        return;
-      }
-      if (result.newTheme) onThemeChange(result.newTheme);
-      if (result.showGUI) { onGUISwitch(); return; }
-
-      if (result.newPath) setCurrentPath(result.newPath);
-      const entry: HistoryEntry = {
-        id: counter,
-        command: cmd,
-        path: currentPath,
-        output: result.output,
-      };
-      setHistory((h) => [...h, entry]);
-      setCounter((c) => c + 1);
-      setCommandHistory((h) => [...h, cmd]);
-      setHistoryIndex(-1);
-      setInput("");
-      inputRef.current?.focus();
+      runCommand(cmd);
     },
-    [currentPath, commandHistory, counter, onThemeChange, onGUISwitch, playExec, setSoundOn, portfolioData, lang, onLangChange]
+    [runCommand]
   );
-  /* ── Execute command ─────────────────────────────── */
+
+  /* ── Execute command from input ──────────────────── */
   const handleSubmit = useCallback(() => {
     const trimmed = input.trim();
-    if (trimmed) trackCommand(trimmed);
-    const result = executeCommand(trimmed, currentPath, commandHistory, portfolioData, lang);
-
-    /* sound toggle */
-    if (result.soundToggle !== undefined) setSoundOn(result.soundToggle);
-
-    /* lang switch */
-    if (result.newLang) onLangChange(result.newLang as Lang);
-
-    playExec();
-
-    /* clear */
-    if (result.clear) {
-      setHistory([]);
-      setShowWelcome(false);
-      setInput("");
-      return;
-    }
-
-    /* theme switch */
-    if (result.newTheme) onThemeChange(result.newTheme);
-
-    /* GUI switch */
-    if (result.showGUI) {
-      onGUISwitch();
-      return;
-    }
-
-    /* cd */
-    if (result.newPath) setCurrentPath(result.newPath);
-
-    /* append to visible history */
-    const entry: HistoryEntry = {
-      id: counter,
-      command: trimmed,
-      path: currentPath,
-      output: result.output,
-    };
-    setHistory((h) => [...h, entry]);
-    setCounter((c) => c + 1);
-
-    if (trimmed) setCommandHistory((h) => [...h, trimmed]);
-    setHistoryIndex(-1);
-    setInput("");
-  }, [input, currentPath, commandHistory, counter, onThemeChange, onGUISwitch, playExec, setSoundOn, portfolioData, lang, onLangChange]);
+    runCommand(trimmed);
+  }, [input, runCommand]);
 
   /* ── Keyboard handler ────────────────────────────── */
   const handleKeyDown = useCallback(
@@ -343,9 +358,17 @@ export default function Terminal({
             jules@portfolio: {currentPath}
           </span>
         </div>
-        <span className="text-[10px] text-[var(--text-dim)] mr-3 hidden sm:inline font-mono">
-          {soundOn ? "sound on" : "sound off"}
-        </span>
+        <div className="flex items-center gap-2">
+          {/* Audio visualizer when sound is on */}
+          <div className={`audio-visualizer ${soundOn ? "active" : ""}`}>
+            {soundOn && [1,2,3,4,5,6,7,8].map((i) => (
+              <span key={i} className="vis-bar" style={{ animationDelay: `${i * 0.05}s` }} />
+            ))}
+          </div>
+          <span className="text-[10px] text-[var(--text-dim)] mr-3 hidden sm:inline font-mono">
+            {soundOn ? "sound on" : "sound off"}
+          </span>
+        </div>
       </div>
 
       {/* ─ Terminal body ─ */}
@@ -354,7 +377,28 @@ export default function Terminal({
         className="flex-1 overflow-y-auto p-3 sm:p-6 bg-[var(--terminal-bg)] min-h-0"
       >
         {/* Welcome */}
-        {showWelcome && getWelcomeMessage()}
+        {showWelcome && (
+          <div className="animate-fade-in">
+            <pre className="text-[var(--prompt)] text-[10px] sm:text-xs leading-tight whitespace-pre glow-text">
+              {`\n     ██╗██╗   ██╗██╗     ███████╗███████╗\n     ██║██║   ██║██║     ██╔════╝██╔════╝\n     ██║██║   ██║██║     █████╗  ███████╗\n██   ██║██║   ██║██║     ██╔══╝  ╚════██║\n╚█████╔╝╚██████╔╝███████╗███████╗███████║\n ╚════╝  ╚═════╝ ╚══════╝╚══════╝╚══════╝\n╔═══╗╦ ╦╔═══╗╦ ╦\n╚═══╝╠═╣║   ║║ ║\n╚═══╝╩ ╩╚═══╝╚═╝  Développeur Full-Stack`}
+            </pre>
+            <br />
+            <p className="text-[var(--text)] opacity-70">
+              {lang === "fr" ? "Bienvenue dans mon terminal portfolio interactif." : "Welcome to my interactive portfolio terminal."}
+            </p>
+            <p className="text-[var(--text)] opacity-70">
+              {lang === "fr" ? "Tapez " : "Type "}
+              <span className="text-[var(--success)] font-bold">help</span>
+              {lang === "fr" ? " pour voir les commandes disponibles." : " to see available commands."}
+            </p>
+            <p className="text-[var(--text)] opacity-50 text-sm mt-1">
+              {lang === "fr"
+                ? "Astuce : Flèches pour l'historique · Tab pour l'auto-complétion · Ctrl+L pour effacer"
+                : "Tip: Use arrows for history · Tab for autocomplete · Ctrl+L to clear"}
+            </p>
+            <br />
+          </div>
+        )}
 
         {/* Output history */}
         {history.map((entry) => (
@@ -367,7 +411,7 @@ export default function Terminal({
                 </span>
               </div>
             )}
-            {entry.output && <div className="mt-1">{entry.output}</div>}
+            {entry.output && <div className="mt-1 output-fade-in">{entry.output}</div>}
           </div>
         ))}
 
