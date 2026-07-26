@@ -1,9 +1,8 @@
 "use client";
 
 /* ─────────────────────────────────────────────────────
-   PortfolioContext – provides portfolio data app-wide.
-   Data can be injected from server component (merged
-   with GitHub API) or falls back to static data.ts.
+   PortfolioContext – provides portfolio data and
+   command-execution callback app-wide.
    ───────────────────────────────────────────────────── */
 
 import {
@@ -15,6 +14,8 @@ import { portfolioData as defaultData, type PortfolioData } from "./data";
 
 interface PortfolioContextValue {
   data: PortfolioData;
+  /** Callback to execute a command programmatically (clickable commands) */
+  executeCommand?: (cmd: string) => void;
 }
 
 const PortfolioCtx = createContext<PortfolioContextValue>({
@@ -29,12 +30,14 @@ export function usePortfolio() {
 export function PortfolioProvider({
   children,
   data,
+  executeCommand,
 }: {
   children: ReactNode;
   data?: PortfolioData;
+  executeCommand?: (cmd: string) => void;
 }) {
   return (
-    <PortfolioCtx.Provider value={{ data: data || defaultData }}>
+    <PortfolioCtx.Provider value={{ data: data || defaultData, executeCommand }}>
       {children}
     </PortfolioCtx.Provider>
   );

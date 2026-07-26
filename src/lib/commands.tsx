@@ -9,6 +9,7 @@ import { getNode, resolvePath, buildFileSystem, type FSNode } from "./fileSystem
 import { launchConfetti } from "./confetti";
 import { type Lang, t } from "./i18n";
 import { getAnalytics, getTopCommands } from "./analytics";
+import { CommandLink } from "@/components/CommandLink";
 
 /* ── Types ───────────────────────────────────────────── */
 export interface CommandResult {
@@ -251,11 +252,15 @@ export function executeCommand(
         output: (
           <p className="text-[var(--error)] text-sm">
             command not found: /{cmd}. Type{" "}
-            <span className="text-[var(--success)]">/help</span> for
+            <CommandLink command="/help" variant="success">/help</CommandLink> for
             available commands.
             {fuzzy.length > 0 && fuzzy[0] !== `/${cmd}` && (
               <span className="block text-[var(--text-dim)] text-xs mt-1">
-                Did you mean <span className="text-[var(--prompt)]">{fuzzy[0]}</span>?
+                Did you mean{" "}
+                <CommandLink command={fuzzy[0]} variant="prompt">
+                  {fuzzy[0]}
+                </CommandLink>
+                ?
               </span>
             )}
           </p>
@@ -314,16 +319,19 @@ function helpCmd(): CommandResult {
           Available Commands
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1">
-          {cmds.map(([c, d]) => (
-            <div key={c} className="flex">
-              <span className="text-[var(--success)] w-36 shrink-0 font-mono text-sm">
-                {c}
-              </span>
-              <span className="text-[var(--text)] opacity-70 text-sm">
-                {d}
-              </span>
-            </div>
-          ))}
+          {cmds.map(([c, d]) => {
+            const cmdName = c.split(" ")[0]; // extract "/about" from "/about" or "/open <id>"
+            return (
+              <div key={c} className="flex items-baseline gap-2">
+                <CommandLink command={cmdName} variant="success" className="w-36 shrink-0 font-mono text-sm">
+                  {c}
+                </CommandLink>
+                <span className="text-[var(--text)] opacity-70 text-sm">
+                  {d}
+                </span>
+              </div>
+            );
+          })}
         </div>
       </div>
     ),
@@ -435,8 +443,9 @@ function projectsCmd(portfolioData: PortfolioData): CommandResult {
                 ))}
               </div>
               <p className="text-[var(--text)] opacity-50 text-xs mt-2">
-                Type{" "}
-                <span className="text-[var(--success)]">open {p.id}</span>{" "}
+                <CommandLink command={`open ${p.id}`} variant="success">
+                  open {p.id}
+                </CommandLink>{" "}
                 for details
               </p>
             </div>
@@ -465,12 +474,12 @@ function openCmd(projectId?: string, portfolioData?: PortfolioData): CommandResu
   if (!project) {
     return {
       output: (
-        <p className="text-[var(--error)]">
-          Project &ldquo;{projectId}&rdquo; not found. Type{" "}
-          <span className="text-[var(--success)]">projects</span> to see
-          available projects.
-        </p>
-      ),
+          <p className="text-[var(--error)]">
+            Project &ldquo;{projectId}&rdquo; not found. Type{" "}
+            <CommandLink command="/projects" variant="success">/projects</CommandLink> to see
+            available projects.
+          </p>
+        ),
     };
   }
 
