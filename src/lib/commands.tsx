@@ -316,6 +316,8 @@ function helpCmd(): CommandResult {
     ["/cowsay <msg>", "Moo!"],
     ["/fortune", "Random dev wisdom"],
     ["/sudo hire-me", "You know what to do"],
+    ["/demo", "Auto-guided presentation tour"],
+    ["/present", "Alias for /demo"],
   ];
 
   return {
