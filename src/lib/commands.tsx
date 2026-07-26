@@ -20,6 +20,7 @@ export interface CommandResult {
   showGUI?: boolean;
   soundToggle?: boolean; // toggle sound on/off
   newLang?: Lang;
+  demoMode?: string[]; // queue of commands for auto-presentation
 }
 
 /* ── ASCII banner ────────────────────────────────────── */
@@ -60,6 +61,8 @@ export function getWelcomeMessage(): React.ReactNode {
 
 /* ── Autocomplete list ───────────────────────────────── */
 export const AVAILABLE_COMMANDS = [
+  "demo",
+  "present",
   "help",
   "about",
   "skills",
@@ -127,6 +130,9 @@ export function executeCommand(
   const command = cmd?.toLowerCase();
 
   switch (command) {
+    case "demo":
+    case "present":
+      return presentCmd();
     case "help":
       return helpCmd();
     case "about":
@@ -335,6 +341,47 @@ function helpCmd(): CommandResult {
         </div>
       </div>
     ),
+  };
+}
+
+/* ── Presentation / Demo mode ─────────────────────────── */
+const DEMO_QUEUE = [
+  "about",
+  "skills",
+  "projects",
+  "open xearn",
+  "stats",
+  "contact",
+];
+
+function presentCmd(): CommandResult {
+  return {
+    output: (
+      <div className="animate-fade-in space-y-2">
+        <p className="text-[var(--accent)] font-bold text-lg">
+          🎬 Presentation Mode
+        </p>
+        <p className="text-[var(--text)] opacity-80 text-sm">
+          Watch a guided tour of this portfolio. Commands will auto-execute
+          every 1.5 seconds.
+        </p>
+        <div className="flex flex-wrap gap-2 mt-3">
+          {DEMO_QUEUE.map((cmd, i) => (
+            <span
+              key={cmd}
+              className="text-xs px-2 py-1 rounded border border-[var(--border)] text-[var(--text-dim)] font-mono"
+              style={{ animationDelay: `${i * 0.1}s` }}
+            >
+              {i + 1}. /{cmd}
+            </span>
+          ))}
+        </div>
+        <p className="text-[var(--text-dim)] text-xs mt-2">
+          Press Ctrl+L or type "clear" to stop.
+        </p>
+      </div>
+    ),
+    demoMode: DEMO_QUEUE,
   };
 }
 

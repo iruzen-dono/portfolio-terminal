@@ -73,6 +73,8 @@ export default function Terminal({
   const [viewportH, setViewportH] = useState("100dvh");
 
   const maxCounterRef = useRef(0);
+  const demoRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const demoQueueRef = useRef<string[]>([]);
 
   /* detect mobile & handle visual viewport changes (keyboard open/close) */
   useEffect(() => {
@@ -116,6 +118,9 @@ export default function Terminal({
   useEffect(() => {
     inputRef.current?.focus();
     trackSession();
+    return () => {
+      if (demoRef.current) clearTimeout(demoRef.current);
+    };
   }, []);
 
   /* Expose execute function to parent (clickable commands) */
@@ -150,6 +155,8 @@ export default function Terminal({
 
       /* clear */
       if (result.clear) {
+        if (demoRef.current) clearTimeout(demoRef.current);
+        demoQueueRef.current = [];
         setHistory([]);
         setShowWelcome(false);
         setInput("");
@@ -181,6 +188,19 @@ export default function Terminal({
       if (trimmed) setCommandHistory((h) => [...h, trimmed]);
       setHistoryIndex(-1);
       setInput("");
+
+      /* ── Demo mode: process queue ── */
+      if (result.demoMode && result.demoMode.length > 0) {
+        demoQueueRef.current = [...result.demoMode];
+        const processNext = () => {
+          if (demoQueueRef.current.length === 0) return;
+          const next = demoQueueRef.current.shift()!;
+          demoRef.current = setTimeout(() => {
+            runCommand(next);
+          }, 1500);
+        };
+        processNext();
+      }
     },
     [currentPath, commandHistory, onThemeChange, onGUISwitch, playExec, setSoundOn, portfolioData, lang, onLangChange]
   );
