@@ -3,7 +3,9 @@
 /* ─────────────────────────────────────────────────────
    Terminal – the hero component of the portfolio.
    Features: command execution, history (↑↓), Tab
-   autocomplete, Ctrl+L clear, scroll-to-bottom.
+   autocomplete, Ctrl+L clear, scroll-to-bottom,
+   Ctrl+K command palette, Ctrl+± font resize,
+   auto-execute from URL (?cmd=).
    Mobile: quick-command bar, history nav buttons,
    viewport-aware keyboard handling.
    ───────────────────────────────────────────────────── */
@@ -25,6 +27,7 @@ import { useSound } from "@/lib/useSound";
 import { usePortfolio } from "@/lib/PortfolioContext";
 import { trackCommand, trackSession } from "@/lib/analytics";
 import type { Lang } from "@/lib/i18n";
+import CommandPalette from "./CommandPalette";
 
 /* ── Quick commands shown on mobile ──────────────────── */
 const QUICK_COMMANDS = [
@@ -47,7 +50,14 @@ interface TerminalProps {
   lang: Lang;
   onLangChange: (lang: Lang) => void;
   onReady?: (execute: (cmd: string) => void) => void;
+  initialCmd?: string; // auto-execute on mount
 }
+
+/* ── Font helpers ────────────────────────────────────── */
+const MIN_FONT = 70;
+const MAX_FONT = 150;
+const FONT_STEP = 5;
+const STORAGE_KEY = "portfolio-terminal-fontsize";
 
 /* ── Component ───────────────────────────────────────── */
 export default function Terminal({
@@ -56,6 +66,7 @@ export default function Terminal({
   lang,
   onLangChange,
   onReady,
+  initialCmd,
 }: TerminalProps) {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -64,6 +75,14 @@ export default function Terminal({
   const [currentPath, setCurrentPath] = useState("~");
   const [counter, setCounter] = useState(0);
   const [showWelcome, setShowWelcome] = useState(true);
+  const [fontSize, setFontSize] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) return Math.min(MAX_FONT, Math.max(MIN_FONT, parseInt(saved, 10)));
+    }
+    return 100; // percent
+  });
+  const [paletteOpen, setPaletteOpen] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -75,6 +94,7 @@ export default function Terminal({
   const maxCounterRef = useRef(0);
   const demoRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const demoQueueRef = useRef<string[]>([]);
+  const initialCmdDone = useRef(false);
 
   /* detect mobile & handle visual viewport changes (keyboard open/close) */
   useEffect(() => {
@@ -131,29 +151,40 @@ export default function Terminal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /* Auto-execute initial command from URL ?cmd= */
+  useEffect(() => {
+    if (initialCmd && !initialCmdDone.current) {
+      initialCmdDone.current = true;
+      /* slight delay so terminal and welcome render first */
+      const timer = setTimeout(() => {
+        runCommand(initialCmd);
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [initialCmd]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /* persist font size */
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, String(fontSize));
+  }, [fontSize]);
+
   const focusInput = useCallback((e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     if (target.closest("a")) return;
-    if (target.closest("[role='button']")) return; // don't steal from CommandLink
+    if (target.closest("[role='button']")) return;
     inputRef.current?.focus();
   }, []);
 
-  /* ── Core execution logic, extracted so it can be called
-         both from the input handler and from external clickable commands ── */
+  /* ── Core execution logic ──────────────────────────── */
   const runCommand = useCallback(
     (trimmed: string) => {
       if (trimmed) trackCommand(trimmed);
       const result = executeCommand(trimmed, currentPath, commandHistory, portfolioData, lang);
 
-      /* sound toggle */
       if (result.soundToggle !== undefined) setSoundOn(result.soundToggle);
-
-      /* lang switch */
       if (result.newLang) onLangChange(result.newLang as Lang);
-
       playExec();
 
-      /* clear */
       if (result.clear) {
         if (demoRef.current) clearTimeout(demoRef.current);
         demoQueueRef.current = [];
@@ -163,41 +194,24 @@ export default function Terminal({
         return;
       }
 
-      /* theme switch */
       if (result.newTheme) onThemeChange(result.newTheme);
-
-      /* GUI switch */
-      if (result.showGUI) {
-        onGUISwitch();
-        return;
-      }
-
-      /* cd */
+      if (result.showGUI) { onGUISwitch(); return; }
       if (result.newPath) setCurrentPath(result.newPath);
 
-      /* append to visible history */
       const id = maxCounterRef.current++;
-      const entry: HistoryEntry = {
-        id,
-        command: trimmed,
-        path: currentPath,
-        output: result.output,
-      };
+      const entry: HistoryEntry = { id, command: trimmed, path: currentPath, output: result.output };
       setHistory((h) => [...h, entry]);
 
       if (trimmed) setCommandHistory((h) => [...h, trimmed]);
       setHistoryIndex(-1);
       setInput("");
 
-      /* ── Demo mode: process queue ── */
       if (result.demoMode && result.demoMode.length > 0) {
         demoQueueRef.current = [...result.demoMode];
         const processNext = () => {
           if (demoQueueRef.current.length === 0) return;
           const next = demoQueueRef.current.shift()!;
-          demoRef.current = setTimeout(() => {
-            runCommand(next);
-          }, 1500);
+          demoRef.current = setTimeout(() => runCommand(next), 1500);
         };
         processNext();
       }
@@ -205,13 +219,10 @@ export default function Terminal({
     [currentPath, commandHistory, onThemeChange, onGUISwitch, playExec, setSoundOn, portfolioData, lang, onLangChange]
   );
 
-  /* ── Mobile: navigate history ────────────────────── */
+  /* ── Mobile: navigate history ──────────────────────── */
   const historyUp = useCallback(() => {
     if (commandHistory.length === 0) return;
-    const idx =
-      historyIndex === -1
-        ? commandHistory.length - 1
-        : Math.max(0, historyIndex - 1);
+    const idx = historyIndex === -1 ? commandHistory.length - 1 : Math.max(0, historyIndex - 1);
     setHistoryIndex(idx);
     setInput(commandHistory[idx]);
     inputRef.current?.focus();
@@ -220,37 +231,71 @@ export default function Terminal({
   const historyDown = useCallback(() => {
     if (historyIndex === -1) return;
     const idx = historyIndex + 1;
-    if (idx >= commandHistory.length) {
-      setHistoryIndex(-1);
-      setInput("");
-    } else {
-      setHistoryIndex(idx);
-      setInput(commandHistory[idx]);
-    }
+    if (idx >= commandHistory.length) { setHistoryIndex(-1); setInput(""); }
+    else { setHistoryIndex(idx); setInput(commandHistory[idx]); }
     inputRef.current?.focus();
   }, [commandHistory, historyIndex]);
 
-  /* ── Mobile: run quick command ───────────────────── */
-  const runQuickCommand = useCallback(
-    (cmd: string) => {
-      setInput(cmd);
-      trackCommand(cmd);
-      runCommand(cmd);
-    },
-    [runCommand]
-  );
+  /* ── Mobile: run quick command ─────────────────────── */
+  const runQuickCommand = useCallback((cmd: string) => {
+    setInput(cmd);
+    trackCommand(cmd);
+    runCommand(cmd);
+  }, [runCommand]);
 
-  /* ── Execute command from input ──────────────────── */
+  /* ── Execute command from input ────────────────────── */
   const handleSubmit = useCallback(() => {
     const trimmed = input.trim();
     runCommand(trimmed);
   }, [input, runCommand]);
 
-  /* ── Keyboard handler ────────────────────────────── */
+  /* ── Font zoom helpers ─────────────────────────────── */
+  const zoomIn = useCallback(() => {
+    setFontSize((f) => Math.min(MAX_FONT, f + FONT_STEP));
+  }, []);
+
+  const zoomOut = useCallback(() => {
+    setFontSize((f) => Math.max(MIN_FONT, f - FONT_STEP));
+  }, []);
+
+  /* ── Command palette ──────────────────────────────── */
+  const openPalette = useCallback(() => {
+    setPaletteOpen(true);
+  }, []);
+
+  const closePalette = useCallback(() => {
+    setPaletteOpen(false);
+    inputRef.current?.focus();
+  }, []);
+
+  const handlePaletteSelect = useCallback((cmd: string) => {
+    setPaletteOpen(false);
+    runCommand(cmd);
+  }, [runCommand]);
+
+  /* ── Keyboard handler ──────────────────────────────── */
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter") {
-        handleSubmit();
+      if (e.key === "Enter") { handleSubmit(); return; }
+
+      /* Ctrl+K → command palette */
+      if (e.key === "k" && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        setPaletteOpen((o) => !o);
+        return;
+      }
+
+      /* Ctrl+= / Ctrl++ → zoom in */
+      if ((e.key === "=" || e.key === "+") && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        zoomIn();
+        return;
+      }
+
+      /* Ctrl+- / Ctrl+_ → zoom out */
+      if ((e.key === "-" || e.key === "_") && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        zoomOut();
         return;
       }
 
@@ -258,10 +303,7 @@ export default function Terminal({
       if (e.key === "ArrowUp") {
         e.preventDefault();
         if (commandHistory.length === 0) return;
-        const idx =
-          historyIndex === -1
-            ? commandHistory.length - 1
-            : Math.max(0, historyIndex - 1);
+        const idx = historyIndex === -1 ? commandHistory.length - 1 : Math.max(0, historyIndex - 1);
         setHistoryIndex(idx);
         setInput(commandHistory[idx]);
         return;
@@ -272,13 +314,8 @@ export default function Terminal({
         e.preventDefault();
         if (historyIndex === -1) return;
         const idx = historyIndex + 1;
-        if (idx >= commandHistory.length) {
-          setHistoryIndex(-1);
-          setInput("");
-        } else {
-          setHistoryIndex(idx);
-          setInput(commandHistory[idx]);
-        }
+        if (idx >= commandHistory.length) { setHistoryIndex(-1); setInput(""); }
+        else { setHistoryIndex(idx); setInput(commandHistory[idx]); }
         return;
       }
 
@@ -297,16 +334,12 @@ export default function Terminal({
             output: (
               <div className="flex flex-wrap gap-2 text-sm font-mono">
                 {matches.map((m) => (
-                  <span key={m} className={
-                    m === matches[0] ? "text-[var(--prompt)]" : "text-[var(--text-dim)]"
-                  }>
+                  <span key={m} className={m === matches[0] ? "text-[var(--prompt)]" : "text-[var(--text-dim)]"}>
                     {m === matches[0] ? `→ ${m}` : m}
                   </span>
                 ))}
                 {!AVAILABLE_COMMANDS.includes(input.toLowerCase()) && (
-                  <span className="text-[var(--text-dim)] opacity-50 text-xs w-full mt-1">
-                    Did you mean one of these?
-                  </span>
+                  <span className="text-[var(--text-dim)] opacity-50 text-xs w-full mt-1">Did you mean one of these?</span>
                 )}
               </div>
             ),
@@ -324,10 +357,10 @@ export default function Terminal({
         setShowWelcome(false);
       }
     },
-    [handleSubmit, commandHistory, historyIndex, input, counter, currentPath]
+    [handleSubmit, commandHistory, historyIndex, input, counter, currentPath, zoomIn, zoomOut]
   );
 
-  /* ── Prompt element ──────────────────────────────── */
+  /* ── Prompt element ────────────────────────────────── */
   const Prompt = ({ path }: { path: string }) => (
     <span className="text-[var(--prompt)] shrink-0 text-sm">
       <span className="hidden sm:inline">jules</span>
@@ -339,11 +372,11 @@ export default function Terminal({
     </span>
   );
 
-  /* ── Render ──────────────────────────────────────── */
+  /* ── Render ────────────────────────────────────────── */
   return (
     <div
       className="flex flex-col scanline relative overflow-hidden"
-      style={{ height: viewportH }}
+      style={{ height: viewportH, fontSize: `${fontSize}%` }}
       onClick={focusInput}
     >
       {/* ─ Title bar ─ */}
@@ -359,6 +392,10 @@ export default function Terminal({
           </span>
         </div>
         <div className="flex items-center gap-2">
+          {/* Font size indicator */}
+          <span className="text-[9px] text-[var(--text-dim)] hidden sm:inline font-mono opacity-60">
+            {fontSize}%
+          </span>
           {/* Audio visualizer when sound is on */}
           <div className={`audio-visualizer ${soundOn ? "active" : ""}`}>
             {soundOn && [1,2,3,4,5,6,7,8].map((i) => (
@@ -393,8 +430,8 @@ export default function Terminal({
             </p>
             <p className="text-[var(--text)] opacity-50 text-sm mt-1">
               {lang === "fr"
-                ? "Astuce : Flèches pour l'historique · Tab pour l'auto-complétion · Ctrl+L pour effacer"
-                : "Tip: Use arrows for history · Tab for autocomplete · Ctrl+L to clear"}
+                ? "Astuce : Flèches pour l'historique · Tab pour l'auto-complétion · Ctrl+L pour effacer · Ctrl+K pour la palette"
+                : "Tip: Use arrows for history · Tab for autocomplete · Ctrl+L to clear · Ctrl+K for palette"}
             </p>
             <br />
           </div>
@@ -406,9 +443,7 @@ export default function Terminal({
             {entry.command !== "" && (
               <div className="flex items-center gap-2">
                 <Prompt path={entry.path} />
-                <span className="text-[var(--text)] text-sm">
-                  {entry.command}
-                </span>
+                <span className="text-[var(--text)] text-sm">{entry.command}</span>
               </div>
             )}
             {entry.output && <div className="mt-1 output-fade-in">{entry.output}</div>}
@@ -418,33 +453,21 @@ export default function Terminal({
         {/* Active input line */}
         <div className="flex items-center gap-2">
           <Prompt path={currentPath} />
-          {/* Mobile: history arrows */}
           {isMobile && (
             <div className="flex gap-1 shrink-0">
-              <button
-                onPointerDown={(e) => { e.preventDefault(); historyUp(); }}
+              <button onPointerDown={(e) => { e.preventDefault(); historyUp(); }}
                 className="text-[var(--text)] opacity-40 active:opacity-100 px-1.5 py-0.5 text-xs border border-[var(--border)] rounded"
-                aria-label="Previous command"
-              >
-                ▲
-              </button>
-              <button
-                onPointerDown={(e) => { e.preventDefault(); historyDown(); }}
+                aria-label="Previous command">▲</button>
+              <button onPointerDown={(e) => { e.preventDefault(); historyDown(); }}
                 className="text-[var(--text)] opacity-40 active:opacity-100 px-1.5 py-0.5 text-xs border border-[var(--border)] rounded"
-                aria-label="Next command"
-              >
-                ▼
-              </button>
+                aria-label="Next command">▼</button>
             </div>
           )}
           <input
             ref={inputRef}
             type="text"
             value={input}
-            onChange={(e) => {
-              setInput(e.target.value);
-              playKey();
-            }}
+            onChange={(e) => { setInput(e.target.value); playKey(); }}
             onKeyDown={handleKeyDown}
             className="flex-1 bg-transparent outline-none text-[var(--text)] caret-[var(--prompt)] font-mono text-sm min-w-0"
             spellCheck={false}
@@ -454,18 +477,10 @@ export default function Terminal({
             enterKeyHint="send"
             autoFocus
           />
-          {/* Mobile: send button */}
           {isMobile && (
-            <button
-              onPointerDown={(e) => {
-                e.preventDefault();
-                handleSubmit();
-              }}
+            <button onPointerDown={(e) => { e.preventDefault(); handleSubmit(); }}
               className="text-[var(--prompt)] px-2 py-0.5 text-sm border border-[var(--border)] rounded active:bg-[var(--prompt)] active:text-[var(--terminal-bg)] transition-colors shrink-0"
-              aria-label="Run command"
-            >
-              ⏎
-            </button>
+              aria-label="Run command">⏎</button>
           )}
         </div>
       </div>
@@ -475,20 +490,22 @@ export default function Terminal({
         <div className="shrink-0 bg-[var(--terminal-bg)] border-t border-[var(--border)] safe-area-bottom">
           <div className="flex gap-2 px-3 py-2 overflow-x-auto scrollbar-hide">
             {QUICK_COMMANDS.map((cmd) => (
-              <button
-                key={cmd}
-                onPointerDown={(e) => {
-                  e.preventDefault();
-                  runQuickCommand(cmd);
-                }}
-                className="shrink-0 text-xs px-3 py-1.5 rounded-full border border-[var(--border)] text-[var(--text)] opacity-70 active:opacity-100 active:border-[var(--accent)] active:text-[var(--accent)] transition-all whitespace-nowrap"
-              >
+              <button key={cmd}
+                onPointerDown={(e) => { e.preventDefault(); runQuickCommand(cmd); }}
+                className="shrink-0 text-xs px-3 py-1.5 rounded-full border border-[var(--border)] text-[var(--text)] opacity-70 active:opacity-100 active:border-[var(--accent)] active:text-[var(--accent)] transition-all whitespace-nowrap">
                 {cmd}
               </button>
             ))}
           </div>
         </div>
       )}
+
+      {/* ─ Command Palette overlay ─ */}
+      <CommandPalette
+        open={paletteOpen}
+        onClose={closePalette}
+        onSelect={handlePaletteSelect}
+      />
     </div>
   );
 }
