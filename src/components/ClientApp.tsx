@@ -35,6 +35,17 @@ export default function ClientApp({
   const [transitioning, setTransitioning] = useState(false);
   const [lang, setLang] = useState<"fr" | "en">("fr");
   const [glitchActive, setGlitchActive] = useState(false);
+  const [initialCmd, setInitialCmd] = useState<string | undefined>(undefined);
+
+  /* Read ?cmd= from URL and skip boot if present */
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const cmd = params.get("cmd");
+    if (cmd) {
+      setInitialCmd(cmd);
+      setMode("terminal"); // skip boot
+    }
+  }, []);
 
   /* Ref to execute commands from context (clickable commands) */
   const executeRef = useRef<((cmd: string) => void) | null>(null);
@@ -117,6 +128,7 @@ export default function ClientApp({
               lang={lang}
               onLangChange={setLang}
               onReady={handleTerminalReady}
+              initialCmd={initialCmd}
             />
           ) : (
             <GUIMode

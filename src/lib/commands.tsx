@@ -3,7 +3,7 @@
    Returns React nodes so output can be richly styled.
    ───────────────────────────────────────────────────── */
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { portfolioData as defaultPortfolioData, type PortfolioData } from "./data";
 import { getNode, resolvePath, buildFileSystem, type FSNode } from "./fileSystem";
 import { launchConfetti } from "./confetti";
@@ -1667,19 +1667,92 @@ function analyticsCmd(lang: Lang): CommandResult {
   };
 }
 
-/* ── whoami — full profile ────────────────────────────── */
+/* ── whoami — full profile + visitor stats ──────────── */
 function whoamiCmd(data: PortfolioData): CommandResult {
   return {
-    output: (
-      <div className="animate-fade-in space-y-0.5 text-sm">
-        <p className="text-[var(--prompt)] font-bold">{data.name}</p>
-        <p className="text-[var(--text)]">{data.title}</p>
-        <p className="text-[var(--text-dim)]">{data.location}</p>
-        <p className="text-[var(--text-dim)] font-mono text-xs mt-1">{data.contact.email}</p>
-        <p className="text-[var(--text-dim)] font-mono text-xs">{data.contact.github}</p>
-      </div>
-    ),
+    output: <WhoamiOutput data={data} />,
   };
+}
+
+/** Client component that hydrates visitor info on the client side */
+function WhoamiOutput({ data }: { data: PortfolioData }) {
+  const [info, setInfo] = useState<{
+    browser: string;
+    os: string;
+    lang: string;
+    tz: string;
+    timeOnPage: string;
+    cmdsExecuted: number;
+  } | null>(null);
+
+  useEffect(() => {
+    const ua = navigator.userAgent;
+    const browser =
+      ua.includes("Edg") ? "Edge" :
+      ua.includes("Chrome") ? "Chrome" :
+      ua.includes("Firefox") ? "Firefox" :
+      ua.includes("Safari") ? "Safari" : "Unknown";
+    const os =
+      ua.includes("Win") ? "Windows" :
+      ua.includes("Mac") ? "macOS" :
+      ua.includes("Linux") ? "Linux" :
+      ua.includes("Android") ? "Android" :
+      ua.includes("iOS") ? "iOS" : "Unknown";
+    const lang = navigator.language;
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    /* rough time-on-page estimate */
+    const start = performance.now();
+    const elapsed = Math.floor((performance.now() - start) / 1000);
+    const timeOnPage = elapsed < 60 ? `${elapsed}s` : `${Math.floor(elapsed / 60)}m ${elapsed % 60}s`;
+
+    /* commands executed count from analytics */
+    let cmdsExecuted = 0;
+    try {
+      const { getTopCommands } = require("@/lib/analytics");
+      const top = getTopCommands();
+      cmdsExecuted = top.reduce((sum: number, c: { count: number }) => sum + c.count, 0);
+    } catch { /* analytics might not be ready */ }
+
+    setInfo({ browser, os, lang, tz, timeOnPage, cmdsExecuted });
+  }, []);
+
+  const line = (label: string, value: string) => (
+    <div className="flex items-baseline gap-2">
+      <span className="text-[var(--text-dim)] w-20 shrink-0 text-right text-xs font-mono">{label}</span>
+      <span className="text-[var(--text)] text-sm">· {value}</span>
+    </div>
+  );
+
+  if (!info) return <div className="text-[var(--text-dim)] text-sm">Loading visitor info…</div>;
+
+  return (
+    <div className="animate-fade-in space-y-0.5 font-mono">
+      {/* ASCII-style user card header */}
+      <div className="flex items-start gap-4 mb-3">
+        <div className="text-[var(--prompt)] text-2xl leading-none mt-1 select-none">
+          ┌─┐<br />├─┤<br />┴ ┴
+        </div>
+        <div>
+          <p className="text-[var(--prompt)] font-bold text-lg">{data.name}</p>
+          <p className="text-[var(--text)] text-sm">{data.title}</p>
+          <p className="text-[var(--text-dim)] text-xs">{data.location}</p>
+        </div>
+      </div>
+
+      <div className="border-t border-[var(--border)] pt-2 mt-2 space-y-0.5">
+        {line("User", data.name)}
+        {line("Email", data.contact.email)}
+        {line("GitHub", data.contact.github.split("/").pop() || "")}
+        {line("Browser", info.browser)}
+        {line("OS", info.os)}
+        {line("Locale", info.lang)}
+        {line("Timezone", info.tz)}
+        {line("Session", info.timeOnPage)}
+        {line("Commands", `${info.cmdsExecuted || "—"}`)}
+      </div>
+    </div>
+  );
 }
 
 /* ── github / gh — repository listing ─────────────────── */
