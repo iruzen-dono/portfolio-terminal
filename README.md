@@ -7,6 +7,14 @@ Un portfolio interactif sous forme de terminal, construit avec **Next.js 14**, *
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8?logo=tailwindcss)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
+## 🖥️ Demo
+
+[![Portfolio Terminal](public/projects/portfolio-terminal.png)](https://portfolio-terminal-lake.vercel.app/)
+
+**Live demo :** [https://portfolio-terminal-lake.vercel.app/](https://portfolio-terminal-lake.vercel.app/)
+
+Tape `help` pour voir les commandes, `theme` pour changer de thème, `lang en` pour basculer en anglais, et cherche les easter eggs (`sudo hire-me` 😉).
+
 ##  Fonctionnalités
 
 ### 🖥️ Mode Terminal
