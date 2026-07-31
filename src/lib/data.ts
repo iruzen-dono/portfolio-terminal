@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────
-   Portfolio data — Updated 2026-07-09
+   Portfolio data — Updated 2026-07-31
    ───────────────────────────────────────────────────── */
 
 export const portfolioData = {
@@ -257,7 +257,7 @@ export const portfolioData = {
     publicRepos: 19,
     totalStars: 5,
     avatarUrl: "https://avatars.githubusercontent.com/u/187991500?v=4",
-    updatedAt: "2026-07-16",
+    updatedAt: "2026-07-31",
   },
 };
 
