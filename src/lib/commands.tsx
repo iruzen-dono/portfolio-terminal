@@ -234,7 +234,7 @@ export function executeCommand(
           return githubCmd(data);
         case "resume":
         case "cv":
-          return resumeCmd();
+          return resumeCmd(lang);
         case "weather":
             case "meteo":
               return weatherCmd(lang);
@@ -1290,16 +1290,16 @@ function wgetCmd(target?: string): CommandResult {
       output: (
         <div className="animate-fade-in space-y-1">
           <p className="text-[var(--text)] text-sm">
-            --{new Date().toISOString()}-- https://iruzen-dono.dev/resume.pdf
+            --{new Date().toISOString()}-- /resume.pdf
           </p>
           <p className="text-[var(--text)] text-sm">
-            Resolving iruzen-dono.dev... 76.76.21.21
+            Resolving portfolio-terminal-lake.vercel.app... 76.76.21.21
           </p>
           <p className="text-[var(--text)] text-sm">
             HTTP request sent, awaiting response... 200 OK
           </p>
           <p className="text-[var(--text)] text-sm">
-            Length: 245,760 (240K) [application/pdf]
+            Length: 59,632 (58K) [application/pdf]
           </p>
           <p className="text-[var(--success)] text-sm mt-1">
             ████████████████████████████████████████ 100% 2.4MB/s
@@ -1799,16 +1799,35 @@ function githubCmd(data: PortfolioData): CommandResult {
 }
 
 /* ── resume / cv ──────────────────────────────────────── */
-function resumeCmd(): CommandResult {
+function resumeCmd(lang: Lang): CommandResult {
+  const isEn = lang === "en";
+  const primary = isEn ? "/resume-en.pdf" : "/resume.pdf";
+  const secondary = isEn ? "/resume.pdf" : "/resume-en.pdf";
   return {
     output: (
       <div className="animate-fade-in space-y-2">
-        <p className="text-[var(--text)] text-sm">My resume is available at:</p>
-        <a href="mailto:juleszhou01@gmail.com?subject=Demande%20de%20CV"
-           className="block text-sm text-[var(--text-dim)] hover:text-[var(--text)] underline underline-offset-2">
-          Send me an email to request it
+        <p className="text-[var(--text)] text-sm">
+          {isEn ? "Download my resume:" : "Télécharge mon CV :"}
+        </p>
+        <a
+          href={primary}
+          download
+          className="block text-sm text-[var(--text-dim)] hover:text-[var(--text)] underline underline-offset-2"
+        >
+          {isEn ? "resume-en.pdf" : "resume.pdf"} — {isEn ? "English" : "français"}
         </a>
-        <p className="text-[var(--text-dim)] text-xs mt-1">Or type 'contact' for other ways to reach me.</p>
+        <a
+          href={secondary}
+          download
+          className="block text-sm text-[var(--text-dim)] hover:text-[var(--text)] underline underline-offset-2"
+        >
+          {isEn ? "resume.pdf" : "resume-en.pdf"} — {isEn ? "French version" : "English version"}
+        </a>
+        <p className="text-[var(--text-dim)] text-xs mt-1">
+          {isEn
+            ? "Or type 'contact' to reach me directly."
+            : "Ou tape 'contact' pour me joindre directement."}
+        </p>
       </div>
     ),
   };
