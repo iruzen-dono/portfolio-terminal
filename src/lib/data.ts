@@ -4,7 +4,7 @@
 
 export const portfolioData = {
   name: "Jules Zhou",
-  title: "Développeur Full-Stack",
+  title: "Développeur Full-Stack & Ingénieur Outils IA",
   location: "Lomé, Togo",
   email: "juleszhou01@gmail.com",
   github: "https://github.com/iruzen-dono",
