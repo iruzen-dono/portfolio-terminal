@@ -33,4 +33,7 @@ yarn-error.log*
 next-env.d.ts
 build.log
 
+# tool config kept out of the repo
+.impeccable/
+
 .vercel
