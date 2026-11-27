@@ -14,9 +14,9 @@ const PHONE = "+228 70 41 88 80";
 const GITHUB = "https://github.com/iruzen-dono";
 
 const figures = [
-  { value: "21", label: "pull requests mergées en open source" },
+  { value: "21", label: "pull requests mergées sur 55 envoyées" },
   { value: "19", label: "dépôts externes contribués" },
-  { value: "5", label: "produits web en production" },
+  { value: "5", label: "applications web développées" },
   { value: "2", label: "paquets publiés sur PyPI" },
 ];
 
@@ -64,7 +64,7 @@ const projects = [
 ];
 
 const skills = [
-  ["Projets en production", "TypeScript, React, Next.js, Python, SQL et PostgreSQL, TailwindCSS, Git, GitHub Actions"],
+  ["Sur mes projets", "TypeScript, React, Next.js, Python, SQL et PostgreSQL, TailwindCSS, Git, GitHub Actions"],
   ["Utilisés ponctuellement", "Node.js, Express, Drizzle ORM, Stripe, Docker, Vercel, Cloudflare"],
   ["Cours et projets académiques (notions)", "Java, Spring Boot, PHP, Laravel, NestJS, Redis"],
   ["IA & agents", "Intégration de modèles de langage, appels d'outils, RAG, serveurs MCP, fiabilité des agents"],
@@ -134,7 +134,7 @@ export default function Profil() {
           </div>
 
           <p className={s.summary}>
-            Je conçois et mets en production des applications web complètes — base de données, API,
+            Je conçois et développe des applications web complètes — base de données, API,
             interface, paiement — et je publie des outils open source en Python. J&apos;écris le code
             avec des assistants IA, puis je relis, teste et corrige jusqu&apos;à ce que ça tourne. Côté open source,
             21 pull requests ont été mergées dans 19 dépôts externes, dont Medusa, neo.mjs, NVIDIA et
@@ -173,12 +173,34 @@ export default function Profil() {
             <div>
               <h3 className={s.itemTitle}>Quotask · LandlordKit · TradeQuote</h3>
               <p className={s.itemBody}>
-                Trois SaaS développés et exploités de bout en bout : devis freelances avec signature
+                Trois applications développées de bout en bout : devis freelances avec signature
                 électronique et paiement en ligne, gestion locative avec portail locataire et loyers
                 récurrents, devis pour artisans avec acceptation en ligne. Le code de ces trois
                 produits est privé ; une démonstration peut être faite sur demande.
               </p>
               <p className={s.tags}>Next.js 16 · Drizzle · PostgreSQL · Stripe</p>
+            </div>
+          </article>
+        </section>
+
+
+        <section className={s.section}>
+          <h2 className={s.sectionTitle}>Contributions open source</h2>
+          <article className={s.item}>
+            <div className={s.itemMeta}>55 PR · 21 mergées</div>
+            <div>
+              <p className={s.itemBody}>
+                19 dépôts externes, 9 avec au moins une PR mergée. Correctifs ciblés, chacun avec un
+                test de non-régression et la justification mesurée dans le fil de revue.
+              </p>
+              <p className={s.tags}>
+                hermes-browser-extension 7 · neo.mjs 5 · dreamcoder 3 · Medusa 1 · NVIDIA/auto-ontology 1 ·
+                Meta Prophet 1 · KeycePass 1
+              </p>
+              <p className={s.tags}>
+                En cours de revue : Flowise 5 · kana-dojo 3 · openllmetry 3 · Directus 2 · Scrapling 1 ·
+                PostHog 1 · Saleor 1 · Dify 1
+              </p>
             </div>
           </article>
         </section>
