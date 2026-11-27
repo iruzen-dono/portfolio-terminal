@@ -22,6 +22,14 @@ const figures = [
 
 const projects = [
   {
+    title: "Hermes — agent IA personnel",
+    href: GITHUB + "/hermes-plugin-gen",
+    period: "2025 — aujourd'hui",
+    body:
+      "Agent autonome qui tourne en continu sur Telegram, Discord, CLI et bureau : outils, skills, tâches planifiées, mémoire persistante et serveurs MCP. J'en exploite une instance et je construis les outils autour — le cœur open source vient d'un projet externe.",
+    tags: "Python · automatisations · MCP · PyPI",
+  },
+  {
     title: "XEARN",
     href: GITHUB + "/XEARN",
     period: "2026 — en cours",
