@@ -11,7 +11,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import Terminal from "@/components/Terminal";
 import MatrixRain from "@/components/MatrixRain";
 import GUIMode from "@/components/GUIMode";
-import BootSequence from "@/components/BootSequence";
+import Intro from "@/components/Intro";
 import GlitchTakeover from "@/components/GlitchTakeover";
 import { PortfolioProvider } from "@/lib/PortfolioContext";
 import { useKonami } from "@/lib/useKonami";
@@ -29,9 +29,10 @@ export default function ClientApp({
   initialMode,
 }: ClientAppProps) {
   const [theme, setTheme] = useState(initialTheme || "dark");
-  const [mode, setMode] = useState<"boot" | "terminal" | "gui">(
-    initialMode ? initialMode : "boot"
+  const [mode, setMode] = useState<"terminal" | "gui">(
+    initialMode ? initialMode : "terminal"
   );
+  const [intro, setIntro] = useState(true);
   const [transitioning, setTransitioning] = useState(false);
   const [lang, setLang] = useState<"fr" | "en">("fr");
   const [glitchActive, setGlitchActive] = useState(false);
@@ -44,6 +45,7 @@ export default function ClientApp({
     if (cmd) {
       setInitialCmd(cmd);
       setMode("terminal"); // skip boot
+      setIntro(false);
     }
   }, []);
 
@@ -96,6 +98,9 @@ export default function ClientApp({
         {/* Konami Easter Egg — Glitch Takeover */}
         <GlitchTakeover active={glitchActive} onComplete={handleGlitchComplete} />
 
+        {/* Intro : 600 ms par-dessus le terminal déjà monté */}
+        {intro && <Intro onDone={() => setIntro(false)} />}
+
         {/* Transition overlay */}
         <div
           className={`fixed inset-0 z-50 pointer-events-none transition-opacity duration-400 ${
@@ -119,9 +124,7 @@ export default function ClientApp({
         </div>
 
         <div className={`relative z-10 ${isGUI ? "" : "h-full"}`}>
-          {mode === "boot" ? (
-            <BootSequence onComplete={() => setMode("terminal")} />
-          ) : mode === "terminal" ? (
+          {mode === "terminal" ? (
             <Terminal
               onThemeChange={setTheme}
               onGUISwitch={() => switchMode("gui")}
