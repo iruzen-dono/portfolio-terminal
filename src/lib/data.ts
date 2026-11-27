@@ -19,8 +19,8 @@ export const portfolioData = {
     "Discord, CLI et desktop — de l'installation à la configuration",
     "des outils, skills et tâches planifiées.",
     "J'ai publié quatre outils open-source pour la communauté Hermes :",
-    "un générateur de plugins, un scanneur de codebase,",
-    "un protocole de packs de contexte portable, et un oracle de projet.",
+    "un générateur de plugins, un protocole de packs de contexte portable,",
+    "un oracle qui audite les fichiers AGENTS.md, et une extension navigateur.",
     "Mon plus gros projet open-source est XEARN, une plateforme",
     "fintech panafricaine de micro-revenus digitaux (NestJS + Next.js + Expo).",
   ],
@@ -68,8 +68,8 @@ export const portfolioData = {
       id: "memory-vault",
       name: "Memory Vault",
       description:
-        "Plugin Hermes Agent qui package les sessions AI en packs `.hermes-memory` portables. Format v1.1.0, 6 tools, hooks on_session, webhook delivery, cron backup. Architecture Cloudflare + Anthropic + OpenAI.",
-      tech: ["Python", "Hermes Plugin", "Cloudflare Workers AI", "SQLite", "JSON Schema", "Cron"],
+        "Package les sessions d'un agent AI en packs `.hermes-memory` portables (format v1.1.0). CLI de 13 commandes, trois backends LLM interchangeables (Cloudflare Workers AI, Anthropic, tout endpoint compatible OpenAI), livraison par webhook et sauvegarde cron. Publié sur PyPI.",
+      tech: ["Python", "Typer", "Pydantic", "Cloudflare Workers AI", "Anthropic", "OpenAI-compatible", "JSON Schema", "Cron"],
       github: "https://github.com/iruzen-dono/memory-vault",
       live: "https://pypi.org/project/hermes-memory-vault/",
       image: "https://opengraph.githubassets.com/1/iruzen-dono/memory-vault",
@@ -101,8 +101,8 @@ export const portfolioData = {
       id: "java-springboot",
       name: "Java-SpringBoot",
       description:
-        "API RESTful Spring Boot avec Spring Security, JWT, JPA/Hibernate, validation et documentation OpenAPI. Architecture en couches suivant les bonnes pratiques du framework.",
-      tech: ["Java 17", "Spring Boot 3", "Spring Security", "JPA/Hibernate", "JWT", "PostgreSQL", "Maven", "OpenAPI"],
+        "Application web Spring Boot 4.1.0 de gestion d'utilisateurs : CRUD complet, authentification par session HTTP, vues Thymeleaf et persistance JDBC sur PostgreSQL. Projet académique, dépôt archivé.",
+      tech: ["Java 17", "Spring Boot 4.1", "Spring MVC", "Spring Data JDBC", "Thymeleaf", "PostgreSQL", "Maven"],
       github: "https://github.com/iruzen-dono/Java-sprinboot",
       live: "",
       image: "https://opengraph.githubassets.com/1/iruzen-dono/Java-sprinboot",
@@ -124,7 +124,7 @@ export const portfolioData = {
       name: "Portfolio Terminal",
       description:
         "Portfolio interactif style terminal Unix avec boot sequence, 30+ commandes, système de fichiers virtuel, mode GUI brutaliste et thèmes dark/light/terminal.",
-      tech: ["Next.js 14", "React 18", "TypeScript", "TailwindCSS", "Web Audio API", "Canvas API", "Framer Motion"],
+      tech: ["Next.js 16", "React 19", "TypeScript", "TailwindCSS", "Web Audio API", "Canvas API"],
       github: "https://github.com/iruzen-dono/portfolio-terminal",
       live: "https://portfolio-terminal-lake.vercel.app",
       image: "/projects/portfolio-terminal.png",
@@ -143,10 +143,10 @@ export const portfolioData = {
     },
     {
       id: "hermes-project-oracle",
-      name: "Hermes Project Oracle",
+      name: "Project Oracle",
       description:
-        "Scanner de codebase pour agents IA : analyse 28 langages, détecte frameworks, conventions, points d'entrée et schémas, puis génère AGENTS.md, CLAUDE.md et notes Obsidian. Zéro dépendance — bibliothèque standard Python uniquement. Installable via pipx.",
-      tech: ["Python", "Hermes Agent", "pathlib", "ast", "JSON Schema", "setuptools"],
+        "Audite le fichier de contexte qu'un agent de code lit comme une vérité : quelles règles le dépôt confirme, lesquelles il contredit (`npm run test` sur un script supprimé), lesquelles ne sont pas vérifiables — puis génère AGENTS.md / CLAUDE.md quand il n'en existe pas. Scanne 28 langages. Zéro dépendance, bibliothèque standard Python. Publié sur PyPI, installable via pipx.",
+      tech: ["Python", "Hermes Agent", "pathlib", "ast", "JSON Schema", "GitHub Actions", "setuptools"],
       github: "https://github.com/iruzen-dono/project-oracle",
       live: "https://pypi.org/project/project-oracle/",
       image: "https://opengraph.githubassets.com/1/iruzen-dono/project-oracle",
@@ -180,7 +180,7 @@ export const portfolioData = {
       description:
         "SaaS de gestion locative : suivi des biens, locataires, loyers et charges. Dashboard analytics avec graphiques, auth sécurisée, notifications email via Resend. Stack Next.js + Drizzle + Neon.",
       tech: ["Next.js 16", "React 19", "Drizzle ORM", "Neon", "NextAuth", "Stripe", "Resend", "TailwindCSS"],
-      github: "",
+      github: "https://github.com/iruzen-dono/landlord-kit",
       live: "",
       image: "https://opengraph.githubassets.com/1/iruzen-dono/landlord-kit",
       year: 2026,
@@ -191,7 +191,7 @@ export const portfolioData = {
       description:
         "SaaS de devis freelance avec création PDF, signature électronique, paiements Stripe/Lemon Squeezy et relances email automatisées. Architecture Next.js 16 App Router avec Base UI et Drizzle.",
       tech: ["Next.js 16", "React 19", "Drizzle ORM", "Neon", "NextAuth", "Stripe", "Lemon Squeezy", "React PDF", "Resend"],
-      github: "",
+      github: "https://github.com/iruzen-dono/quotask",
       live: "",
       image: "https://opengraph.githubassets.com/1/iruzen-dono/quotask",
       year: 2026,
@@ -202,7 +202,7 @@ export const portfolioData = {
       description:
         "SaaS de devis pour artisans et prestataires : création de devis, articles réutilisables, profil entreprise, TVA paramétrable, export PDF et page publique d'acceptation/refus pour le client. Stack Next.js 16 + Drizzle + Neon.",
       tech: ["Next.js 16", "React 19", "Drizzle ORM", "Neon", "NextAuth", "React PDF", "TailwindCSS"],
-      github: "",
+      github: "https://github.com/iruzen-dono/trade-quote",
       live: "",
       image: "https://opengraph.githubassets.com/1/iruzen-dono/trade-quote",
       year: 2026,
@@ -226,7 +226,7 @@ export const portfolioData = {
       company: "Freelance / Open Source",
       period: "Janvier 2026 — Présent",
       description:
-        "Conception et développement de SaaS multi-stack : Workless (moteur workflow open-source Laravel + Next.js), LandLordKit (gestion locative avec Drizzle + Neon + Stripe), Quotask (plateforme de devis avec signature PDF et Lemon Squeezy), TradeQuote (devis pour artisans et prestataires, acceptation en ligne). Opération d'un agent IA Hermes personnel déployé sur Telegram, Discord, CLI, TUI et desktop avec configuration outils, skills, plugins, mémoire persistante et tâches CRON. Publication de trois outils open-source pour la communauté Hermes : Project Oracle (scanneur codebase 28 langages), Plugin Generator (scaffolder NLP), Memory Vault (format pack portable v1.1.0).",
+        "Conception et développement de SaaS multi-stack : Workless (moteur workflow open-source Laravel + Next.js), LandLordKit (gestion locative avec Drizzle + Neon + Stripe), Quotask (plateforme de devis avec signature PDF et Lemon Squeezy), TradeQuote (devis pour artisans et prestataires, acceptation en ligne). Opération d'un agent IA Hermes personnel déployé sur Telegram, Discord, CLI, TUI et desktop avec configuration outils, skills, plugins, mémoire persistante et tâches CRON. Publication de quatre outils open-source pour la communauté Hermes : Project Oracle (audit des fichiers AGENTS.md, 28 langages), Plugin Generator (scaffolder NLP), Memory Vault (format de pack portable v1.1.0), Browser Extension (panneau latéral natif du navigateur).",
     },
     {
       role: "Licence Intelligence Artificielle & Big Data (3e année)",
