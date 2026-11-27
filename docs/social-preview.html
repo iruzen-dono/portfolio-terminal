@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:1280px; height:640px; }
+  body {
+    background:#080A0B;
+    color:#D7E3DA;
+    font-family:Consolas,"Cascadia Mono","Courier New",monospace;
+    padding:0 76px 44px 116px;
+    display:flex; flex-direction:column;
+    position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+  .rule { position:absolute; left:0; top:0; width:8px; height:640px; background:#4AF07A; }
+  .content { flex:1; display:flex; flex-direction:column; justify-content:center; padding-top:12px; }
+  .kicker { font-size:20px; color:#4AF07A; letter-spacing:.02em; }
+  .kicker .cur { color:#D7E3DA; }
+  h1 { font-family:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+       font-size:61px; line-height:1.12; font-weight:700; letter-spacing:-.028em;
+       margin-top:26px; color:#F3F7F4; }
+  h1 .g { color:#4AF07A; }
+  .red { display:block; font-size:38px; line-height:1.3; color:#9FB3A6; margin-top:20px; }
+  .sub { font-size:23px; line-height:1.5; color:#7E8F84; margin-top:28px; max-width:920px; }
+  .foot { display:flex; justify-content:space-between; align-items:baseline;
+          border-top:1px solid #1B2A20; padding-top:22px; font-size:20px; color:#7E8F84; }
+  .foot .l { color:#C9DAD0; }
+  .foot .l b { color:#4AF07A; font-weight:400; }
+  .blink { display:inline-block; width:11px; height:19px; background:#4AF07A; vertical-align:-3px; margin-left:9px; }
+</style>
+</head>
+<body>
+  <div class="rule"></div>
+  <div class="content">
+    <div class="kicker"><span class="cur">jules@lome:~$</span> ./portfolio --gui<span class="blink"></span></div>
+    <h1>Jules Zhou &mdash; d&eacute;veloppeur <span class="g">full-stack</span>.</h1>
+    <span class="red">Un portfolio qui se visite au clavier.</span>
+    <div class="sub">Boot sequence, 30+ commandes, syst&egrave;me de fichiers virtuel, mode GUI brutaliste,
+      bilingue fr/en. Next.js 16 &middot; TypeScript.</div>
+  </div>
+  <div class="foot">
+    <div class="l"><b>&gt;</b> portfolio-terminal-lake.vercel.app</div>
+    <div>Lom&eacute;, Togo</div>
+  </div>
+</body>
+</html>
