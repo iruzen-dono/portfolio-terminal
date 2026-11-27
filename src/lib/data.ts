@@ -94,7 +94,7 @@ export const portfolioData = {
       tech: ["Next.js 15", "React 19", "TypeScript", "NestJS", "Prisma", "PostgreSQL", "Expo", "Reanimated", "TailwindCSS", "Docker"],
       github: "https://github.com/iruzen-dono/XEARN",
       live: "",
-      image: "https://opengraph.githubassets.com/1/iruzen-dono/XEARN",
+      image: "/projects/xearn.png",
       year: 2026,
     },
     {
@@ -149,7 +149,7 @@ export const portfolioData = {
       tech: ["Python", "Hermes Agent", "pathlib", "ast", "JSON Schema", "GitHub Actions", "setuptools"],
       github: "https://github.com/iruzen-dono/project-oracle",
       live: "https://pypi.org/project/project-oracle/",
-      image: "https://opengraph.githubassets.com/1/iruzen-dono/project-oracle",
+      image: "/projects/project-oracle.png",
       year: 2026,
     },
     {
