@@ -32,7 +32,7 @@ const projects = [
   {
     title: "XEARN",
     href: GITHUB + "/XEARN",
-    period: "2026 — en cours",
+    period: "2025 — en cours",
     body:
       "Plateforme panafricaine de micro-revenus numériques, en monorepo : plus de 40 endpoints API, suite de tests automatisés, gamification, panneau d'administration.",
     tags: "NestJS 11 · Next.js 15 · Expo · PostgreSQL",
