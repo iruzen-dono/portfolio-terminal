@@ -56,11 +56,10 @@ const projects = [
 ];
 
 const skills = [
-  ["Langages", "TypeScript, Python, JavaScript, SQL, Java, PHP, HTML/CSS"],
-  ["Web", "React 19, Next.js 16, TailwindCSS, Node.js, NestJS, Express, Laravel, Spring Boot"],
-  ["Données", "PostgreSQL, MySQL, SQLite, Drizzle ORM, Prisma, Redis"],
+  ["Projets en production", "TypeScript, React, Next.js, Python, SQL et PostgreSQL, TailwindCSS, Git, GitHub Actions"],
+  ["Utilisés ponctuellement", "Node.js, Express, Drizzle ORM, Stripe, Docker, Vercel, Cloudflare"],
+  ["Cours et projets académiques (notions)", "Java, Spring Boot, PHP, Laravel, NestJS, Redis"],
   ["IA & agents", "Intégration de modèles de langage, appels d'outils, RAG, serveurs MCP, fiabilité des agents"],
-  ["Outils", "Git, GitHub Actions, CI/CD, Docker, Linux, Vercel, Cloudflare, tests automatisés"],
 ];
 
 const education = [
@@ -128,7 +127,8 @@ export default function Profil() {
 
           <p className={s.summary}>
             Je conçois et mets en production des applications web complètes — base de données, API,
-            interface, paiement — et je publie des outils open source en Python. Côté open source,
+            interface, paiement — et je publie des outils open source en Python. J&apos;écris le code
+            avec des assistants IA, puis je relis, teste et corrige jusqu&apos;à ce que ça tourne. Côté open source,
             21 pull requests ont été mergées dans 19 dépôts externes, dont Medusa, neo.mjs, NVIDIA et
             Meta Prophet : à chaque fois une correction ciblée, un test de non-régression et la
             justification du correctif dans le fil de revue.
