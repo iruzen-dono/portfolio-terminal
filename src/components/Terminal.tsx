@@ -433,6 +433,12 @@ export default function Terminal({
                 ? "Astuce : Flèches pour l'historique · Tab pour l'auto-complétion · Ctrl+L pour effacer · Ctrl+K pour la palette"
                 : "Tip: Use arrows for history · Tab for autocomplete · Ctrl+L to clear · Ctrl+K for palette"}
             </p>
+            <p className="text-[var(--text)] opacity-60 text-sm mt-2">
+              {lang === "fr" ? "Vous cherchez le CV ? " : "Looking for the CV? "}
+              <a href="/profil" className="text-[var(--prompt)] underline decoration-dotted hover:opacity-100">
+                {lang === "fr" ? "profil lisible et CV en PDF →" : "readable profile and PDF CV →"}
+              </a>
+            </p>
             <br />
           </div>
         )}

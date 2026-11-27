@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────
-   Portfolio data — Updated 2026-07-31
+   Portfolio data — Updated 2026-11-27
    ───────────────────────────────────────────────────── */
 
 export const portfolioData = {
@@ -81,9 +81,9 @@ export const portfolioData = {
       description:
         "Application de gestion de présence multi-plateforme (Android/Desktop) avec QR codes, géolocalisation, anti-fraude HMAC, Ktor backend, architecture KMP et interface Compose.",
       tech: ["Kotlin", "KMP", "Compose Multiplatform", "Ktor", "SQLite", "Exposed", "Gradle"],
-      github: "https://github.com/iruzen-dono/KeycePass",
+      github: "https://github.com/keisary/KeycePass/pull/1",
       live: "",
-      image: "https://opengraph.githubassets.com/1/iruzen-dono/KeycePass",
+      image: "https://opengraph.githubassets.com/1/keisary/KeycePass",
       year: 2025,
     },
     {
@@ -147,9 +147,9 @@ export const portfolioData = {
       description:
         "Scanner de codebase pour agents IA : analyse 28 langages, détecte frameworks, conventions, points d'entrée et schémas, puis génère AGENTS.md, CLAUDE.md et notes Obsidian. Zéro dépendance — bibliothèque standard Python uniquement. Installable via pipx.",
       tech: ["Python", "Hermes Agent", "pathlib", "ast", "JSON Schema", "setuptools"],
-      github: "https://github.com/iruzen-dono/hermes-project-oracle",
-      live: "https://pypi.org/project/hermes-project-oracle/",
-      image: "https://opengraph.githubassets.com/1/iruzen-dono/hermes-project-oracle",
+      github: "https://github.com/iruzen-dono/project-oracle",
+      live: "https://pypi.org/project/project-oracle/",
+      image: "https://opengraph.githubassets.com/1/iruzen-dono/project-oracle",
       year: 2026,
     },
     {
@@ -180,7 +180,7 @@ export const portfolioData = {
       description:
         "SaaS de gestion locative : suivi des biens, locataires, loyers et charges. Dashboard analytics avec graphiques, auth sécurisée, notifications email via Resend. Stack Next.js + Drizzle + Neon.",
       tech: ["Next.js 16", "React 19", "Drizzle ORM", "Neon", "NextAuth", "Stripe", "Resend", "TailwindCSS"],
-      github: "https://github.com/iruzen-dono/landlord-kit",
+      github: "",
       live: "",
       image: "https://opengraph.githubassets.com/1/iruzen-dono/landlord-kit",
       year: 2026,
@@ -191,7 +191,7 @@ export const portfolioData = {
       description:
         "SaaS de devis freelance avec création PDF, signature électronique, paiements Stripe/Lemon Squeezy et relances email automatisées. Architecture Next.js 16 App Router avec Base UI et Drizzle.",
       tech: ["Next.js 16", "React 19", "Drizzle ORM", "Neon", "NextAuth", "Stripe", "Lemon Squeezy", "React PDF", "Resend"],
-      github: "https://github.com/iruzen-dono/quotask",
+      github: "",
       live: "",
       image: "https://opengraph.githubassets.com/1/iruzen-dono/quotask",
       year: 2026,
@@ -202,7 +202,7 @@ export const portfolioData = {
       description:
         "SaaS de devis pour artisans et prestataires : création de devis, articles réutilisables, profil entreprise, TVA paramétrable, export PDF et page publique d'acceptation/refus pour le client. Stack Next.js 16 + Drizzle + Neon.",
       tech: ["Next.js 16", "React 19", "Drizzle ORM", "Neon", "NextAuth", "React PDF", "TailwindCSS"],
-      github: "https://github.com/iruzen-dono/trade-quote",
+      github: "",
       live: "",
       image: "https://opengraph.githubassets.com/1/iruzen-dono/trade-quote",
       year: 2026,
@@ -213,9 +213,9 @@ export const portfolioData = {
       description:
         "Application web multi-joueur pour soirées musicales interactives : scan QR code, roue de la fortune Spotify, mode Quiz (deviner titre/extrait), mode Jukebox. Stack Next.js + Socket.IO + Spotify API.",
       tech: ["Next.js", "React", "Socket.IO", "Spotify API", "TypeScript", "TailwindCSS"],
-      github: "https://github.com/iruzen-dono/roue-fortune",
+      github: "https://github.com/iruzen-dono/playlist-roue-fortune",
       live: "",
-      image: "https://opengraph.githubassets.com/1/iruzen-dono/roue-fortune",
+      image: "https://opengraph.githubassets.com/1/iruzen-dono/playlist-roue-fortune",
       year: 2026,
     },
   ],
@@ -226,14 +226,21 @@ export const portfolioData = {
       company: "Freelance / Open Source",
       period: "Janvier 2026 — Présent",
       description:
-        "Conception et développement de SaaS multi-stack : Workless (moteur workflow open-source Laravel + Next.js), LandLordKit (gestion locative avec Drizzle + Neon + Stripe), Quotask (plateforme de devis avec signature PDF et Lemon Squeezy), TradeQuote (outil de cotation trading). Opération d'un agent IA Hermes personnel déployé sur Telegram, Discord, CLI, TUI et desktop avec configuration outils, skills, plugins, mémoire persistante et tâches CRON. Publication de trois outils open-source pour la communauté Hermes : Project Oracle (scanneur codebase 28 langages), Plugin Generator (scaffolder NLP), Memory Vault (format pack portable v1.1.0).",
+        "Conception et développement de SaaS multi-stack : Workless (moteur workflow open-source Laravel + Next.js), LandLordKit (gestion locative avec Drizzle + Neon + Stripe), Quotask (plateforme de devis avec signature PDF et Lemon Squeezy), TradeQuote (devis pour artisans et prestataires, acceptation en ligne). Opération d'un agent IA Hermes personnel déployé sur Telegram, Discord, CLI, TUI et desktop avec configuration outils, skills, plugins, mémoire persistante et tâches CRON. Publication de trois outils open-source pour la communauté Hermes : Project Oracle (scanneur codebase 28 langages), Plugin Generator (scaffolder NLP), Memory Vault (format pack portable v1.1.0).",
     },
     {
-      role: "Étudiant B2 IT",
-      company: "Ascencia Keyce Togo (AK Togo)",
-      period: "2024 — Présent",
+      role: "Licence Intelligence Artificielle & Big Data (3e année)",
+      company: "Ascencia Keyce Togo (Africa Campus, Lomé)",
+      period: "2026 — en cours",
       description:
-        "Formation Bac+2 en Informatique (IT-B2 A). Analyse fonctionnelle, génie logiciel, POO Java, bases de données. Projets académiques : CDPS (cahier des charges d'une plateforme de suivi d'insertion professionnelle) et KeycePass (application KMP de contrôle de présence par QR code, géolocalisation et anti-fraude HMAC).",
+        "Machine learning, traitement de données massives, Python, bases de données. Projet académique : KeycePass (application mobile de contrôle de présence par QR code, géolocalisation et anti-fraude HMAC), dont la correction a été mergée en amont.",
+    },
+    {
+      role: "Informatique & Génie Logiciel — deux années",
+      company: "Collège de Paris Supérieur (Lomé)",
+      period: "2023 — 2025",
+      description:
+        "Algorithmique, programmation orientée objet (Java), bases de données relationnelles et transactions SQL, génie logiciel. Projet académique : CDPS, cahier des charges d'une plateforme de suivi d'insertion professionnelle.",
     },
     {
       role: "Développeur Java — Projet Académique",
@@ -252,12 +259,12 @@ export const portfolioData = {
   },
 
   githubProfile: {
-    followers: 8,
+    followers: 11,
     following: 4,
-    publicRepos: 19,
-    totalStars: 5,
+    publicRepos: 22,
+    totalStars: 7,
     avatarUrl: "https://avatars.githubusercontent.com/u/187991500?v=4",
-    updatedAt: "2026-07-31",
+    updatedAt: "2026-11-27",
   },
 };
 
